@@ -1,5 +1,6 @@
 <script>
     import { toYearsAndMonthsHint } from '../utils';
+
     export let mortgageBase;
 </script>
 

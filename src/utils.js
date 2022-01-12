@@ -1,4 +1,4 @@
-export const toYearsAndMonthsHint = (totalMonths) => { 
+export const toYearsAndMonthsHint = (totalMonths) => {
     let hint = '';
     let negativeSign = '- ';
     if (totalMonths < 0)
@@ -60,4 +60,8 @@ export const toYearsAndMonthsHint = (totalMonths) => {
     }
 
     return hint;
+}
+
+export const toPLN = (amount) => {
+    return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(amount)
 }

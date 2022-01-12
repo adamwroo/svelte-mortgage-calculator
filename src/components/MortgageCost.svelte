@@ -1,5 +1,6 @@
 <script>
     import { calculateMonthlyInstallment, getMonthlyPayments } from '../calculations';
+    import { toPLN } from '../utils';
 
     export let mortgageBase;
 
@@ -10,6 +11,6 @@
 </script>
 
 <h2>Koszt:</h2>
-Miesięczna rata: { monthlyInstallment }
+Miesięczna rata: { toPLN(monthlyInstallment) }
 <br />
-Całkowity koszt odsetek : { interestCost }
+Całkowity koszt odsetek : { toPLN(interestCost) }
