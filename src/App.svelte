@@ -1,11 +1,13 @@
 <script>
-	import { mortgage } from './stores';
-	import MortgageInfo from './components/MortgageInfo.svelte'
+	import { mortgageBase } from './stores';
+	import MortgageBase from './components/MortgageBase.svelte';
+	import MortgageCost from './components/MortgageCost.svelte';
 </script>
 
 <main>
-	<h1>Mortgage Calculator</h1>
-	<MortgageInfo bind:mortgage={$mortgage} />
+	<h1>Kalkulator hipoteczny</h1>
+	<MortgageBase bind:mortgageBase={$mortgageBase} />
+	<MortgageCost mortgageBase={$mortgageBase} />
 </main>
 
 <style>
@@ -14,13 +16,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	@media (min-width: 640px) {
