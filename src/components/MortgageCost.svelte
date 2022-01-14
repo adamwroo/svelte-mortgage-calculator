@@ -11,6 +11,6 @@
 </script>
 
 <h2>Koszt:</h2>
-Miesięczna rata: { toPLN(monthlyInstallment) }
+Miesięczna rata: <b>{ toPLN(monthlyInstallment) }</b>
 <br />
-Całkowity koszt odsetek : { toPLN(interestCost) }
+Całkowity koszt odsetek: <b>{ toPLN(interestCost) }</b>

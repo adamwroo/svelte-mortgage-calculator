@@ -2,12 +2,18 @@
 	import { mortgageBase } from './stores';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
+	import AddAlternative from './components/AddAlternative.svelte';
+
+	const handleAlternativeAdded = e => {
+		console.log("alternative added:");
+		console.log(e.detail);
+	}
 </script>
 
 <main>
-	<h1>Kalkulator hipoteczny</h1>
 	<MortgageBase bind:mortgageBase={$mortgageBase} />
 	<MortgageCost mortgageBase={$mortgageBase} />
+	<AddAlternative mortgageBase={$mortgageBase} on:alternative-added={handleAlternativeAdded}/>
 </main>
 
 <style>
