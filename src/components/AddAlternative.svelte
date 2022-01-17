@@ -19,7 +19,7 @@
     const addAlternative = () =>{
         // todo: add proper submit
         showModal = false;
-        dispatch('alternative-added', {overpayment, adjustType, interestRateChange});
+        dispatch('alternative-added', {overpayment, interestRateChange, adjustType});
     }
 </script>
 
