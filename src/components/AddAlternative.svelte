@@ -3,21 +3,23 @@
     const dispatch = createEventDispatcher();
     import { fade } from 'svelte/transition';
     import { clickOutside } from "../actions";
+    import { toPLN } from '../utils';
+
     export let mortgageBase;
 
     let showModal = false;
 
     let overpayment = 0;
-    let overpaymentResult = "shorten-credit"; // or "reduce-installment";
-    let newInterestRate = mortgageBase.interestRate;
+    let adjustType = "adjust-number-of-payments"; // or "adjust-installment";
+    let interestRateChange = 0;
 
     let isAlternativeDifferent = false;
-    $: isAlternativeDifferent = overpayment > 0 || newInterestRate != mortgageBase.interestRate;
+    $: isAlternativeDifferent = overpayment > 0 || interestRateChange != 0;
 
     const addAlternative = () =>{
         // todo: add proper submit
         showModal = false;
-        dispatch('alternative-added', {overpayment, overpaymentResult, newInterestRate});
+        dispatch('alternative-added', {overpayment, adjustType, interestRateChange});
     }
 </script>
 
@@ -42,24 +44,28 @@
                         Nadpłata
                         <br />
                         <input bind:value={overpayment} type="number" id="amount" min="0" max={mortgageBase.amount} step="10000" />
+                        <br />
+                        <small><i>Pozostała kwota: {toPLN(mortgageBase.amount - overpayment)}</i></small>
+                    </label>
+
+                    <label for="interestRateChange">
+                        Zmiana oprocentowania (+/-)
+                        <br />
+                        <input bind:value={interestRateChange} type="number" id="interestRateChange" min={-mortgageBase.interestRate} max="100" step="0.1" />
+                        <br />
+                        <small><i>Nowe oprocentowanie: {mortgageBase.interestRate + interestRateChange}%</i></small>
                     </label>
 
                     <div>
                         <label>
-                            <input type="radio" bind:group={overpaymentResult} name="overpayment-result" value="shorten-credit" disabled={overpayment == 0}>
-                            Skróć kredyt
+                            <input type="radio" bind:group={adjustType} name="adjust-type" value="adjust-number-of-payments" disabled={overpayment == 0}>
+                            Zmień liczbę rat
                         </label>
                         <label>
-                            <input type="radio" bind:group={overpaymentResult} name="overpayment-result" value="reduce-installment" disabled={overpayment == 0}>
-                            Zmniejsz ratę
+                            <input type="radio" bind:group={adjustType} name="adjust-type" value="adjust-installment" disabled={overpayment == 0}>
+                            Zmień wysokość raty
                         </label>
                     </div>
-
-                    <label for="interestRate">
-                        Nowe oprocentowanie
-                        <br />
-                        <input bind:value={newInterestRate} type="number" id="interestRate" min="0.1" max="100" step="0.1" />
-                    </label>
 
                     <div class="buttons">
                         <!-- todo: should reset values -->
