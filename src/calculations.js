@@ -2,7 +2,7 @@
 * see: https://finanse.rankomat.pl/poradniki/obliczyc-rate-kredytu-gotowkowego
 */
 export const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => {
-    if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0) return 0;
+    if (numberOfPayments <= 0) return 0;
 
     // sigma notation summation
     let sigma = 0.0;
