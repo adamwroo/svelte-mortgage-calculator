@@ -1,10 +1,12 @@
 <script>
 	import { mortgageBase } from './stores';
+	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
 	import AddAlternative from './components/AddAlternative.svelte';
 	import MortgageAlternative from './components/MortgageAlternative.svelte';
 
+	$: mortgage = getMortgage($mortgageBase);
 	let alternatives = [];
 
 	const getNewAlternativeId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1
@@ -16,7 +18,7 @@
 
 <main>
 	<MortgageBase bind:mortgageBase={$mortgageBase} />
-	<MortgageCost mortgageBase={$mortgageBase} />
+	<MortgageCost {mortgage} />
 	<AddAlternative mortgageBase={$mortgageBase} on:alternative-added={handleAlternativeAdded}/>
 	{#each alternatives as alternative}
 		<MortgageAlternative {...alternative} />
