@@ -2,7 +2,12 @@ export const getMortgage = (mortgageBase) => {
     const monthlyInstallment = calculateMonthlyInstallment(mortgageBase.amount, mortgageBase.interestRate, mortgageBase.numberOfPayments);
     const monthlyPayments = getMonthlyPayments(mortgageBase.amount, mortgageBase.interestRate, mortgageBase.numberOfPayments, monthlyInstallment);
 
-    return { ...mortgageBase, monthlyInstallment, monthlyPayments };
+    return {
+        ...mortgageBase,
+        monthlyInstallment,
+        monthlyPayments,
+        getInterestCost: () => monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)
+    };
 }
 
 /**
@@ -38,5 +43,3 @@ export const getMonthlyPayments = (amount, interestRate, numberOfPayments, month
 
     return payments;
 }
-
-export const getInterestCost = monthlyPayments => monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0);
