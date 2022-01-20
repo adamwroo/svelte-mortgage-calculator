@@ -45,5 +45,5 @@
 {/if}
 
 {#each alternatives as alternative}
-    <Alternative {...alternative} />
+    <Alternative {alternative} {mortgage} />
 {/each}

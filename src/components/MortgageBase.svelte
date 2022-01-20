@@ -19,7 +19,7 @@
 <label for="amount">
     Kwota
     <br />
-    <input bind:value={mortgageBase.amount} on:change={updateMaxes} type="number" id="amount" min="0" max="10000000" step="10000" />
+    <input bind:value={mortgageBase.amount} on:change={updateMaxes} type="number" id="amount" min="0" max="10000000" step="10000" autocomplete="off" />
     <br />
     <input bind:value={mortgageBase.amount} on:change={updateMaxes} type="range" min="10000" max={amountMax} step="10000" tabindex="-1" />
 </label>
@@ -27,7 +27,7 @@
 <label for="interestRate">
     Oprocentowanie
     <br />
-    <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="number" id="interestRate" min="0" max="100" step="0.01" />
+    <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="number" id="interestRate" min="0" max="100" step="0.01" autocomplete="off" />
     <br />
     <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="range" min="0" max={interestRateMax} step="0.01" tabindex="-1" />
 </label>
