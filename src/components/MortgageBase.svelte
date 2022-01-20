@@ -7,7 +7,7 @@
     let interestRateMax = mortgageBase.interestRate * 2;
     let numberOfPaymentsMax = mortgageBase.numberOfPayments * 2;
 
-    const updateAmountsAndMaxes = () => {
+    const updateValuesAndMaxes = () => {
         mortgageBase.amount = Math.max(mortgageBase.amount, 0);
         mortgageBase.interestRate = Math.max(mortgageBase.interestRate, 0);
         mortgageBase.numberOfPayments = Math.max(mortgageBase.numberOfPayments, 0);
@@ -23,25 +23,25 @@
 <label for="amount">
     Kwota
     <br />
-    <input bind:value={mortgageBase.amount} on:change={updateAmountsAndMaxes} type="number" id="amount" min="0" max="10000000" step="10000" autocomplete="off" />
+    <input bind:value={mortgageBase.amount} on:change={updateValuesAndMaxes} type="number" id="amount" min="0" max="10000000" step="10000" autocomplete="off" />
     <br />
-    <input bind:value={mortgageBase.amount} on:change={updateAmountsAndMaxes} type="range" min="10000" max={amountMax} step="10000" tabindex="-1" />
+    <input bind:value={mortgageBase.amount} on:change={updateValuesAndMaxes} type="range" min="10000" max={amountMax} step="10000" tabindex="-1" />
 </label>
 
 <label for="interestRate">
     Oprocentowanie
     <br />
-    <input bind:value={mortgageBase.interestRate} on:change={updateAmountsAndMaxes} type="number" id="interestRate" min="0" max="100" step="0.01" autocomplete="off" />
+    <input bind:value={mortgageBase.interestRate} on:change={updateValuesAndMaxes} type="number" id="interestRate" min="0" max="100" step="0.01" autocomplete="off" />
     <br />
-    <input bind:value={mortgageBase.interestRate} on:change={updateAmountsAndMaxes} type="range" min="0" max={interestRateMax} step="0.01" tabindex="-1" />
+    <input bind:value={mortgageBase.interestRate} on:change={updateValuesAndMaxes} type="range" min="0" max={interestRateMax} step="0.01" tabindex="-1" />
 </label>
 
 <label for="numberOfPayments">
     Liczba rat
     <br />
-    <input bind:value={mortgageBase.numberOfPayments} on:change={updateAmountsAndMaxes} type="number" id="numberOfPayments" min="0" max="600" step="1" />
+    <input bind:value={mortgageBase.numberOfPayments} on:change={updateValuesAndMaxes} type="number" id="numberOfPayments" min="0" max="600" step="1" />
     <br />
-    <input bind:value={mortgageBase.numberOfPayments} on:change={updateAmountsAndMaxes} type="range" min="1" max={numberOfPaymentsMax} step="1" tabindex="-1" />
+    <input bind:value={mortgageBase.numberOfPayments} on:change={updateValuesAndMaxes} type="range" min="1" max={numberOfPaymentsMax} step="1" tabindex="-1" />
     <br />
     ({ toYearsAndMonthsHint(mortgageBase.numberOfPayments) })
 </label>
