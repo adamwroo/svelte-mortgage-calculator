@@ -1,4 +1,5 @@
 export const getMortgage = (mortgageBase) => {
+    // todo: set mins to 0
     const monthlyInstallment = calculateMonthlyInstallment(mortgageBase.amount, mortgageBase.interestRate, mortgageBase.numberOfPayments);
     const monthlyPayments = getMonthlyPayments(mortgageBase.amount, mortgageBase.interestRate, mortgageBase.numberOfPayments, monthlyInstallment);
 
@@ -13,7 +14,7 @@ export const getMortgage = (mortgageBase) => {
 /**
 * see: https://finanse.rankomat.pl/poradniki/obliczyc-rate-kredytu-gotowkowego
 */
-export const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => {
+const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => {
     if (numberOfPayments <= 0) return 0;
 
     // sigma notation summation
@@ -26,7 +27,7 @@ export const calculateMonthlyInstallment = (amount, interestRate, numberOfPaymen
     return amount / sigma;
 }
 
-export const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
+const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
 
     let payments = [];
