@@ -29,7 +29,7 @@
     <br />
     <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="number" id="interestRate" min="0" max="100" step="0.01" />
     <br />
-    <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="range" min="0.1" max={interestRateMax} step="0.01" tabindex="-1" />
+    <input bind:value={mortgageBase.interestRate} on:change={updateMaxes} type="range" min="0" max={interestRateMax} step="0.01" tabindex="-1" />
 </label>
 
 <label for="numberOfPayments">

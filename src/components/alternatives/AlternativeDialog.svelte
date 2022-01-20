@@ -2,8 +2,8 @@
     import {createEventDispatcher} from "svelte";
     const dispatch = createEventDispatcher();
     import { fade } from 'svelte/transition';
-    import { clickOutside } from "../actions";
-    import { toPLN } from '../utils';
+    import { clickOutside } from "../../actions";
+    import { toPLN } from '../../utils';
 
     export let alternative;
     export let mortgage;
@@ -54,11 +54,11 @@
 
                     <div>
                         <label>
-                            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" disabled={alternative.overpayment == 0}>
+                            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" />
                             Zmień liczbę rat
                         </label>
                         <label>
-                            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-installment" disabled={alternative.overpayment == 0}>
+                            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-installment" />
                             Zmień wysokość raty
                         </label>
                     </div>

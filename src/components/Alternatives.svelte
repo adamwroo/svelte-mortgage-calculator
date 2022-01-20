@@ -1,6 +1,6 @@
 <script>
-    import AlternativeDialog from './AlternativeDialog.svelte';
-	import Alternative from './Alternative.svelte';
+    import AlternativeDialog from './alternatives/AlternativeDialog.svelte';
+	import Alternative from './alternatives/Alternative.svelte';
 
     export let alternatives = [];
     export let mortgage;
