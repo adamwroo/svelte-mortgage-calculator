@@ -2,14 +2,12 @@
     import {createEventDispatcher} from "svelte";
     const dispatch = createEventDispatcher();
     import { fade } from 'svelte/transition';
-    import { toPLN } from '../../utils';
+    import AlternativeInfo from './AlternativeInfo.svelte';
+    import { toYearsAndMonthsHint, toPLN } from '../../utils';
     import { recalculate } from '../../calculations';
 
     export let alternative;
     export let mortgage;
-
-    $: newAmount = Math.max(mortgage.amount - alternative.overpayment, 0);
-    $: newInterestRate = Math.max(mortgage.interestRate + alternative.interestRateChange, 0);
 
     $: newMortgage = recalculate(mortgage, alternative);
 
@@ -25,50 +23,38 @@
         <button on:click={remove}>Usuń</button>
     </p>
     <p>
-        Kwota: {toPLN(newAmount)}
-        {#if alternative.overpayment > 0}
-        (<b class="better">-{toPLN(alternative.overpayment)}</b>)
-        {/if}
+        Kwota: {toPLN(newMortgage.amount)}
+        <AlternativeInfo oldValue={mortgage.amount} newValue={newMortgage.amount} type="currency" />
     </p>
     <p>
-        Oprocentowanie: {newInterestRate}%
-        {#if alternative.interestRateChange < 0}
-        (<b class="better">{alternative.interestRateChange}%</b>)
-        {:else if alternative.interestRateChange > 0}
-        (<b class="worse">+{alternative.interestRateChange}%</b>)
-        {/if}
+        Oprocentowanie: {newMortgage.interestRate.toFixed(2)}%
+        <AlternativeInfo oldValue={mortgage.interestRate} newValue={newMortgage.interestRate} type="percent" />
     </p>
     {#if newMortgage != null && !isNaN(newMortgage.numberOfPayments)}
-    <p>
-        Liczba rat: {newMortgage.numberOfPayments}
-        {#if alternative.adjustType === 'adjust-number-of-payments' && newMortgage.numberOfPayments < mortgage.numberOfPayments}
-        (<b class="better">{newMortgage.numberOfPayments - mortgage.numberOfPayments}</b>)
-        {:else if alternative.adjustType === 'adjust-number-of-payments' && newMortgage.numberOfPayments < mortgage.numberOfPayments}
-        (<b class="worce">+{newMortgage.numberOfPayments - mortgage.numberOfPayments}</b>)
-        {/if}
-    </p>
-    <p>
-        Miesięczna rata: { toPLN(newMortgage.monthlyInstallment) }
-        {#if alternative.adjustType === 'adjust-installment' && newMortgage.monthlyInstallment < mortgage.monthlyInstallment}
-        (<b class="better">{toPLN(newMortgage.monthlyInstallment - mortgage.monthlyInstallment)}</b>)
-        {:else if alternative.adjustType === 'adjust-installment' && newMortgage.monthlyInstallment > mortgage.monthlyInstallment}
-        (<b class="worse">+{toPLN(newMortgage.monthlyInstallment - mortgage.monthlyInstallment)}</b>)
-        {/if}
-    </p>
-    <p>
-        Całkowity koszt odsetek: { toPLN(newMortgage.getInterestCost()) }
-        {#if newMortgage.getInterestCost() < mortgage.getInterestCost()}
-        (<b class="better">{toPLN(newMortgage.getInterestCost() - mortgage.getInterestCost())}</b>)
-        {:else if newMortgage.monthlyInstallment > mortgage.monthlyInstallment}
-        (<b class="worse">+{toPLN(newMortgage.getInterestCost() - mortgage.getInterestCost())}</b>)
-        {/if}
-    </p>
+        <p>
+            Liczba rat: {newMortgage.numberOfPayments} ({toYearsAndMonthsHint(newMortgage.numberOfPayments)})
+            <br />
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} />
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} type="years-and-mmonths" />
+        </p>
+        <p>
+            Miesięczna rata: { toPLN(newMortgage.monthlyInstallment) }
+            {#if alternative.adjustType === 'adjust-installment'}
+                <AlternativeInfo oldValue={mortgage.monthlyInstallment} newValue={newMortgage.monthlyInstallment} type="currency" />
+            {/if}
+        </p>
+        <p>
+            Całkowity koszt odsetek: { toPLN(newMortgage.getInterestCost()) }
+            <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={newMortgage.getInterestCost()} type="currency" />
+        </p>
     {:else if newMortgage != null && alternative.adjustType === 'adjust-number-of-payments' && isNaN(newMortgage.numberOfPayments)}
-    <p class="worse">
-        Przy oprocentowaniu {newInterestRate}% niemożliwe jest utrzymanie wysokości raty {toPLN(mortgage.monthlyInstallment)}.
-        <br />
-        Miesięczny koszt samej raty odsetkowej przekracza {toPLN(mortgage.monthlyInstallment)}!
-    </p>
+        <p class="warning">
+            <small>
+                Przy oprocentowaniu {newMortgage.interestRate}% niemożliwe jest utrzymanie wysokości raty {toPLN(mortgage.monthlyInstallment)}.
+                <br />
+                Miesięczny koszt samej raty odsetkowej przekracza {toPLN(mortgage.monthlyInstallment)}!
+            </small>
+        </p>
     {/if}
 </div>
 
@@ -77,11 +63,7 @@
         margin: 0;
     }
 
-    .better {
-        color: green;
-    }
-
-    .worse {
+    .warning {
         color: red;
     }
 </style>

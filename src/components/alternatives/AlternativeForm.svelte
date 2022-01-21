@@ -36,7 +36,7 @@
         <br />
         <input bind:value={alternative.interestRateChange} type="number" id="interestRateChange" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
         <br />
-        <small><i>Nowe oprocentowanie: {mortgage.interestRate + alternative.interestRateChange}%</i></small>
+        <small><i>Nowe oprocentowanie: {(mortgage.interestRate + alternative.interestRateChange).toFixed(2)}%</i></small>
     </label>
 
     <div>

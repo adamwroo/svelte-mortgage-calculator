@@ -1,6 +1,6 @@
 export const toYearsAndMonthsHint = (totalMonths) => {
     let hint = '';
-    let negativeSign = '- ';
+    let negativeSign = '-';
     if (totalMonths < 0)
     {
         totalMonths = Math.abs(totalMonths);
