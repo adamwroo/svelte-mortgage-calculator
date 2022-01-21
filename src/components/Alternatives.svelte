@@ -38,10 +38,15 @@
         let id = e.detail;
         alternatives = alternatives.filter(a => a.id !== id);
     }
+
+    const removeAllAlternatives = () => {
+        alternatives = [];
+    }
 </script>
 
 <h2>Alternatywy:</h2>
 <button on:click={() => (showModal = true)}>Dodaj</button>
+<button on:click={removeAllAlternatives}>Usuń wszystkie</button>
 
 {#if showModal}
     <AlternativeDialog
