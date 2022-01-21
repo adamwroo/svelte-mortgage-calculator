@@ -3,9 +3,7 @@
 
     export let mortgageBase;
 
-    let amountMax = mortgageBase.amount * 2;
-    let interestRateMax = mortgageBase.interestRate * 2;
-    let numberOfPaymentsMax = mortgageBase.numberOfPayments * 2;
+    let amountMax, interestRateMax, numberOfPaymentsMax;
 
     const updateValuesAndMaxes = () => {
         mortgageBase.amount = Math.max(mortgageBase.amount, 0);
@@ -16,6 +14,8 @@
         interestRateMax = Math.max(mortgageBase.interestRate * 2, 2);
         numberOfPaymentsMax = Math.max(mortgageBase.numberOfPayments * 2, 120);
     }
+
+    updateValuesAndMaxes();
 </script>
 
 <h2>Kredyt:</h2>
@@ -39,7 +39,7 @@
 <label for="numberOfPayments">
     Liczba rat
     <br />
-    <input bind:value={mortgageBase.numberOfPayments} on:change={updateValuesAndMaxes} type="number" id="numberOfPayments" min="0" max="600" step="1" />
+    <input bind:value={mortgageBase.numberOfPayments} on:change={updateValuesAndMaxes} type="number" id="numberOfPayments" min="0" max="600" step="1" autocomplete="off" />
     <br />
     <input bind:value={mortgageBase.numberOfPayments} on:change={updateValuesAndMaxes} type="range" min="1" max={numberOfPaymentsMax} step="1" tabindex="-1" />
     <br />

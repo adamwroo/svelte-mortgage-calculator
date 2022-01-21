@@ -6,6 +6,7 @@
     export let mortgage;
 
     let showModal = false;
+
     const getNewId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1;
     const resetAlternative = () => ( {
         id: getNewId(),
