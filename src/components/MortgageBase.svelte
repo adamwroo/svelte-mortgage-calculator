@@ -23,7 +23,7 @@
 <label for="amount">
     Kwota
     <br />
-    <input bind:value={mortgageBase.amount} on:change={updateValuesAndMaxes} type="number" id="amount" min="0" max="10000000" step="10000" autocomplete="off" />
+    <input bind:value={mortgageBase.amount} on:change={updateValuesAndMaxes} type="number" id="amount" min="0" max="10000000" step="100" autocomplete="off" />
     <br />
     <input bind:value={mortgageBase.amount} on:change={updateValuesAndMaxes} type="range" min="10000" max={amountMax} step="10000" tabindex="-1" />
 </label>

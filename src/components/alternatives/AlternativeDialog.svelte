@@ -39,7 +39,7 @@
                     <label for="amount">
                         Nadpłata
                         <br />
-                        <input bind:value={alternative.overpayment} type="number" id="amount" min="0" max={mortgage.amount} step="10000" autocomplete="off" />
+                        <input bind:value={alternative.overpayment} type="number" id="amount" min="0" max={mortgage.amount} step="100" autocomplete="off" />
                         <br />
                         <small><i>Pozostała kwota: {toPLN(mortgage.amount - alternative.overpayment)}</i></small>
                     </label>
