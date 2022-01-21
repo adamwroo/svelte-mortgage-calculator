@@ -1,0 +1,72 @@
+<script>
+    import {createEventDispatcher} from "svelte";
+    const dispatch = createEventDispatcher();
+    import { fade } from 'svelte/transition';
+    import { clickOutside } from "../actions";
+
+    const cancel = () => {
+        dispatch('cancel');
+    }
+</script>
+
+<div class="bg">
+    <div class="window-wrap" transition:fade>
+        <div
+            class="window"
+            role="dialog"
+            aria-modal="true"
+        >
+            <div class="content"
+                use:clickOutside
+                on:outclick={cancel}
+            >
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    * {
+        box-sizing: border-box;
+        --main-margin: 2rem;
+    }
+
+    .bg {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.66);
+    }
+
+    .window-wrap {
+        position: relative;
+        margin: var(--main-margin);
+        max-height: 100%;
+    }
+
+    .window {
+        position: relative;
+        max-width: min(100%, 40rem);
+        max-height: 100%;
+        margin: var(--main-margin) auto;
+        color: black;
+        border-radius: 0.5rem;
+        background: white;
+    }
+
+    .content {
+        position: relative;
+        padding: 0.5rem 1rem;
+        max-height: calc(100vh - calc(2 * var(--main-margin)));
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+    }
+</style>

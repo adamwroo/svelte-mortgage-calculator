@@ -1,6 +1,6 @@
 <script>
     import AlternativeDialog from './alternatives/AlternativeDialog.svelte';
-	import Alternative from './alternatives/Alternative.svelte';
+    import Alternative from './alternatives/Alternative.svelte';
 
     export let alternatives = [];
     export let mortgage;
@@ -27,13 +27,15 @@
 
     const addAlternative = e => {
         let alternative = e.detail;
-        alternatives = [...alternatives, alternative];
+        // prevent double submission
+        if (alternatives.findIndex(a => a.id == alternative.id) === -1) {
+            alternatives = [...alternatives, alternative];
+        }
         discardDialog();
     }
 
     const removeAlternative = e => {
         let id = e.detail;
-        console.log(id)
         alternatives = alternatives.filter(a => a.id !== id);
     }
 </script>
@@ -51,6 +53,6 @@
     />
 {/if}
 
-{#each alternatives as alternative}
+{#each alternatives as alternative (alternative.id)}
     <Alternative {alternative} {mortgage} on:remove={removeAlternative} />
 {/each}
