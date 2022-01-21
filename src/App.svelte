@@ -1,18 +1,17 @@
 <script>
-	import { mortgageBase } from './stores';
+	import { mortgageBase, alternatives } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
 	import Alternatives from './components/Alternatives.svelte';
 
 	$: mortgage = getMortgage($mortgageBase);
-	let alternatives = [];
 </script>
 
 <main>
 	<MortgageBase bind:mortgageBase={$mortgageBase} />
 	<MortgageCost {mortgage} />
-	<Alternatives bind:alternatives={alternatives} {mortgage} />
+	<Alternatives bind:alternatives={$alternatives} {mortgage} />
 </main>
 
 <style>

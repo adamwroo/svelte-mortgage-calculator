@@ -29,6 +29,12 @@
         alternatives = [...alternatives, alternative];
         discardDialog();
     }
+
+    const removeAlternative = e => {
+        let id = e.detail;
+        console.log(id)
+        alternatives = alternatives.filter(a => a.id !== id);
+    }
 </script>
 
 <h2>Alternatywy:</h2>
@@ -45,5 +51,5 @@
 {/if}
 
 {#each alternatives as alternative}
-    <Alternative {alternative} {mortgage} />
+    <Alternative {alternative} {mortgage} on:remove={removeAlternative} />
 {/each}
