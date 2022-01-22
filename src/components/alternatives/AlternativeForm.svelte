@@ -27,18 +27,18 @@
 </script>
 
 <form on:submit|preventDefault={submitAlternative} on:keydown={e => e.key === 'Escape' && cancel()}>
-    <label for="amount">
+    <label for="amount-form">
         Nadpłata
         <br />
-        <input bind:value={alternative.overpayment} type="number" id="amount" min="0" max={mortgage.amount} step="100" autocomplete="off" />
+        <input bind:value={alternative.overpayment} type="number" id="amount-form" min="0" max={mortgage.amount} step="100" autocomplete="off" />
         <br />
         <small><i>Pozostała kwota: {toPLN(mortgage.amount - alternative.overpayment)}</i></small>
     </label>
 
-    <label for="interestRateChange">
+    <label for="interest-rate-change-form">
         Zmiana oprocentowania (+/-)
         <br />
-        <input bind:value={alternative.interestRateChange} type="number" id="interestRateChange" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
+        <input bind:value={alternative.interestRateChange} type="number" id="interest-rate-change-form" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
         <br />
         <small><i>Nowe oprocentowanie: {(mortgage.interestRate + alternative.interestRateChange).toFixed(2)}%</i></small>
     </label>
