@@ -8,10 +8,14 @@
 	$: mortgage = getMortgage($mortgageBase);
 </script>
 
-<main>
-	<MortgageBase bind:mortgageBase={$mortgageBase} />
-	<MortgageCost {mortgage} />
-	<Alternatives bind:alternatives={$alternatives} {mortgage} />
+<main class="with-sidebar">
+	<div class="sidebar">
+		<MortgageBase bind:mortgageBase={$mortgageBase} />
+		<MortgageCost {mortgage} />
+	</div>
+	<div class="not-sidebar">
+		<Alternatives bind:alternatives={$alternatives} {mortgage} />
+	</div>
 </main>
 
 <style>
@@ -26,5 +30,20 @@
 		main {
 			max-width: none;
 		}
+	}
+
+	.with-sidebar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.sidebar {
+		flex-grow: 1;
+	}
+
+	.not-sidebar {
+		flex-basis: 0;
+		flex-grow: 999;
 	}
 </style>
