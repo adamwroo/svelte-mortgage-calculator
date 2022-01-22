@@ -52,7 +52,7 @@
             <small>
                 Przy oprocentowaniu {newMortgage.interestRate}% niemożliwe jest utrzymanie wysokości raty {toPLN(mortgage.monthlyInstallment)}.
                 <br />
-                Miesięczny koszt samej raty odsetkowej przekracza {toPLN(mortgage.monthlyInstallment)}!
+                Liczba rat musiałaby być &infin;!
             </small>
         </p>
     {/if}
