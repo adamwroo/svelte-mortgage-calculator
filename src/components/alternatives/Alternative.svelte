@@ -16,20 +16,23 @@
     }
 </script>
 
-<div transition:fade>
-    <hr />
+<div class="alternative" transition:fade>
     <p>
         Alternatywa
         <button on:click={remove}>Usuń</button>
     </p>
-    <p>
-        Kwota: {toPLN(newMortgage.amount)}
-        <AlternativeInfo oldValue={mortgage.amount} newValue={newMortgage.amount} type="currency" />
-    </p>
-    <p>
-        Oprocentowanie: {newMortgage.interestRate.toFixed(2)}%
-        <AlternativeInfo oldValue={mortgage.interestRate} newValue={newMortgage.interestRate} type="percent" />
-    </p>
+    {#if newMortgage == null}
+        <p class="warning">Niewłaściwe dane</p>
+    {:else}
+        <p>
+            Kwota: {toPLN(newMortgage.amount)}
+            <AlternativeInfo oldValue={mortgage.amount} newValue={newMortgage.amount} type="currency" />
+        </p>
+        <p>
+            Oprocentowanie: {newMortgage.interestRate.toFixed(2)}%
+            <AlternativeInfo oldValue={mortgage.interestRate} newValue={newMortgage.interestRate} type="percent" />
+        </p>
+    {/if}
     {#if newMortgage != null && !isNaN(newMortgage.numberOfPayments)}
         <p>
             Liczba rat: {newMortgage.numberOfPayments} ({toYearsAndMonthsHint(newMortgage.numberOfPayments)})

@@ -58,6 +58,16 @@
     />
 {/if}
 
-{#each alternatives as alternative (alternative.id)}
-    <Alternative {alternative} {mortgage} on:remove={removeAlternative} />
-{/each}
+<dvi class="alternatives">
+    {#each alternatives as alternative (alternative.id)}
+        <Alternative {alternative} {mortgage} on:remove={removeAlternative} />
+    {/each}
+</dvi>
+
+<style>
+    .alternatives {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 1rem;
+    }
+</style>
