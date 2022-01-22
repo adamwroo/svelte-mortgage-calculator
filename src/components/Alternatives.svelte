@@ -6,10 +6,11 @@
     export let mortgage;
 
     let showModal = false;
+    let isEditing = false;
 
     const getNewId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1;
     const resetAlternative = () => ( {
-        id: getNewId(),
+        id: getNewId(), // consider 'undefined' for initial alternative
         overpayment: 0,
         interestRateChange: 0,
         adjustType: 'adjust-number-of-payments' // 'adjust-number-of-payments' or 'adjust-installment'
@@ -18,10 +19,13 @@
 
     const cancelDialog = () => {
         showModal = false;
+        isEditing = false;
+        currentAlternative = resetAlternative(); // todo: cancel and discard do the same thing
     }
 
     const discardDialog = () => {
         showModal = false;
+        isEditing = false;
         currentAlternative = resetAlternative();
     }
 
@@ -34,9 +38,26 @@
         discardDialog();
     }
 
+    const saveAlternative = e => {
+        let alternative = e.detail;
+        console.log('saving:');
+        console.log(alternative);
+
+        const i = alternatives.findIndex(a => a.id == alternative.id);
+        alternatives[i] = { ...alternative };
+        discardDialog();
+    }
+
     const removeAlternative = e => {
         let id = e.detail;
         alternatives = alternatives.filter(a => a.id !== id);
+    }
+
+    const editAlternative = e => {
+        const alternative = e.detail;
+        currentAlternative = alternative;
+        isEditing = true;
+        showModal = true;
     }
 
     const removeAllAlternatives = () => {
@@ -52,15 +73,17 @@
     <AlternativeDialog
         alternative={currentAlternative}
         {mortgage}
+        {isEditing}
         on:cancel={cancelDialog}
         on:discard={discardDialog}
         on:add={addAlternative}
+        on:save={saveAlternative}
     />
 {/if}
 
 <dvi class="alternatives">
     {#each alternatives as alternative (alternative.id)}
-        <Alternative {alternative} {mortgage} on:remove={removeAlternative} />
+        <Alternative {alternative} {mortgage} on:edit={editAlternative} on:remove={removeAlternative} />
     {/each}
 </dvi>
 

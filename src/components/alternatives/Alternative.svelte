@@ -11,6 +11,10 @@
 
     $: newMortgage = recalculate(mortgage, alternative);
 
+    const edit = () => {
+        dispatch('edit', alternative);
+    }
+
     const remove = () => {
         dispatch('remove', alternative.id);
     }
@@ -18,7 +22,7 @@
 
 <div class="alternative" transition:fade>
     <p>
-        Alternatywa
+        <button on:click={edit}>Edytuj</button>
         <button on:click={remove}>Usuń</button>
     </p>
     {#if newMortgage == null}

@@ -5,9 +5,10 @@
 
     export let alternative;
     export let mortgage;
+    export let isEditing = false;
 
     let isAlternativeDifferent = false;
-    $: isAlternativeDifferent = alternative.overpayment > 0 || alternative.interestRateChange != 0;
+    $: isAlternativeDifferent = alternative.overpayment > 0 || alternative.interestRateChange != 0; // todo" should be differen for 'isEditing'
 
     const cancel = () => {
         dispatch('cancel');
@@ -17,12 +18,15 @@
         dispatch('discard');
     }
 
-    const addAlternative = () => {
-        dispatch('add', alternative);
+    const submitAlternative = () => {
+        if (isEditing)
+            dispatch('save', alternative);
+        else
+            dispatch('add', alternative);
     }
 </script>
 
-<form on:submit|preventDefault={addAlternative} on:keydown={e => e.key === 'Escape' && cancel()}>
+<form on:submit|preventDefault={submitAlternative} on:keydown={e => e.key === 'Escape' && cancel()}>
     <label for="amount">
         Nadpłata
         <br />

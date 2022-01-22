@@ -5,8 +5,8 @@
     export let newValue;
     export let type = '';
 
-    const difference = newValue - oldValue;
-    const textDifference = () => {
+    $: difference = newValue - oldValue;
+    $: textDifference = () => {
         let text = '';
 
         if (difference > 0) text += '+';

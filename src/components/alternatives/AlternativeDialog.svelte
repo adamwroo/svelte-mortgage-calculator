@@ -4,8 +4,9 @@
 
     export let alternative;
     export let mortgage;
+    export let isEditing = false;
 </script>
 
 <Dialog on:cancel>
-    <AlternativeForm {alternative} {mortgage} on:cancel on:discard on:add />
+    <AlternativeForm {alternative} {mortgage} {isEditing} on:cancel on:discard on:add on:save />
 </Dialog>
