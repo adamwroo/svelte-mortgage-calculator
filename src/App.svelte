@@ -10,8 +10,10 @@
 
 <main class="with-sidebar">
 	<div class="sidebar">
-		<MortgageBase bind:mortgageBase={$mortgageBase} />
-		<MortgageCost {mortgage} />
+		<div class="sticky">
+			<MortgageBase bind:mortgageBase={$mortgageBase} />
+			<MortgageCost {mortgage} />
+		</div>
 	</div>
 	<div class="not-sidebar">
 		<Alternatives bind:alternatives={$alternatives} {mortgage} />
@@ -33,6 +35,12 @@
 
 	.sidebar {
 		flex-grow: 1;
+	}
+
+	.sticky {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0; /* todo: incude parents' margin/padding */
 	}
 
 	.not-sidebar {
