@@ -2,6 +2,7 @@
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
     import { toPLN } from '../../utils';
+    import { selectOnFocus } from '../../actions';
 
     export let alternative;
     export let mortgage;
@@ -30,7 +31,7 @@
     <label for="amount-form">
         Nadpłata
         <br />
-        <input bind:value={alternative.overpayment} type="number" id="amount-form" min="0" max={mortgage.amount} step="100" autocomplete="off" />
+        <input bind:value={alternative.overpayment} use:selectOnFocus type="number" id="amount-form" min="0" max={mortgage.amount} step="100" autocomplete="off" />
         <br />
         <small><i>Pozostała kwota: {toPLN(mortgage.amount - alternative.overpayment)}</i></small>
     </label>
@@ -38,7 +39,7 @@
     <label for="interest-rate-change-form">
         Zmiana oprocentowania (+/-)
         <br />
-        <input bind:value={alternative.interestRateChange} type="number" id="interest-rate-change-form" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
+        <input bind:value={alternative.interestRateChange} use:selectOnFocus type="number" id="interest-rate-change-form" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
         <br />
         <small><i>Nowe oprocentowanie: {(mortgage.interestRate + alternative.interestRateChange).toFixed(2)}%</i></small>
     </label>
