@@ -4,11 +4,10 @@
 
     export let alternative;
     export let mortgage;
-    export let isEditing = false; // todo: decide if remove and if dialog should be aware that it's editing
     export let send;
     export let receive;
 </script>
 
 <Dialog on:cancel {send} {receive} key={alternative.id}>
-    <AlternativeForm {alternative} {mortgage} {isEditing} on:cancel on:add on:save />
+    <AlternativeForm {alternative} {mortgage} on:cancel on:save />
 </Dialog>

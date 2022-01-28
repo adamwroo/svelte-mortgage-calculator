@@ -7,52 +7,43 @@
     export let alternatives = [];
     export let mortgage;
 
-    let showModal = false;
-    let isEditing = false;
+    let showingDialog = false;
+    let alternativeForDialog;
 
     const [send, receive] = crossfade({ duration: 1000, fallback: fade });
 
     const getNewId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1;
-    const resetAlternative = () => ( {
-        id: getNewId(), // consider 'undefined' for initial alternative
+    const getNewAlternative = () => ( {
+        id: getNewId(),
         overpayment: 0,
         interestRateChange: 0,
-        adjustType: 'adjust-number-of-payments' // 'adjust-number-of-payments' or 'adjust-installment'
+        adjustType: 'adjust-installment' // 'adjust-installment' or 'adjust-number-of-payments'
     } );
-    let currentAlternative = resetAlternative();
 
-    const cancelDialog = () => {
-        showModal = false;
-        isEditing = false;
-        currentAlternative = resetAlternative();
+    const openDialog = alternative => {
+        alternativeForDialog = alternative ?? getNewAlternative();
+        showingDialog = true;
     }
 
-    const addAlternative = e => {
-        let alternative = e.detail;
-        // prevent double submission
-        if (alternatives.findIndex(a => a.id == alternative.id) === -1) {
-            alternatives = [alternative, ...alternatives];
-        }
-        cancelDialog();
+    const closeDialog = () => {
+        showingDialog = false;
     }
 
-    const saveAlternative = e => {
-        let alternative = e.detail;
+    const saveAlternative = alternative => {
         const i = alternatives.findIndex(a => a.id == alternative.id);
-        alternatives[i] = { ...alternative };
-        cancelDialog();
+        if (i === -1) {
+            // adding new
+            alternatives = [alternative, ...alternatives];
+        } else {
+            // saving edited
+            alternatives[i] = { ...alternative };
+        }
+
+        closeDialog()
     }
 
-    const removeAlternative = e => {
-        let id = e.detail;
+    const removeAlternative = id => {
         alternatives = alternatives.filter(a => a.id !== id);
-    }
-
-    const editAlternative = e => {
-        const alternative = e.detail;
-        currentAlternative = alternative;
-        isEditing = true;
-        showModal = true;
     }
 
     const removeAllAlternatives = () => {
@@ -61,17 +52,15 @@
 </script>
 
 <h2>Alternatywy:</h2>
-<button on:click={() => (showModal = true)}>Dodaj</button>
+<button on:click={() => openDialog()}>Dodaj</button>
 <button on:click={removeAllAlternatives}>Usuń wszystkie</button>
 
-{#if showModal}
+{#if showingDialog}
     <AlternativeDialog
-        alternative={currentAlternative}
+        alternative={alternativeForDialog}
         {mortgage}
-        {isEditing}
-        on:cancel={cancelDialog}
-        on:add={addAlternative}
-        on:save={saveAlternative}
+        on:cancel={closeDialog}
+        on:save={e => saveAlternative(e.detail)}
         {send}
         {receive}
     />
@@ -84,7 +73,7 @@
             in:receive={{key: alternative.id}}
             out:send={{key: alternative.id}}
         >
-            <Alternative {alternative} {mortgage} on:edit={editAlternative} on:remove={removeAlternative} />
+            <Alternative {alternative} {mortgage} on:edit={e => openDialog(e.detail)} on:remove={e => removeAlternative(e.detail)} />
         </div>
     {/each}
 </dvi>

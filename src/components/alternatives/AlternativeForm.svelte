@@ -6,20 +6,21 @@
 
     export let alternative;
     export let mortgage;
-    export let isEditing = false;
+
+    let initialAlternative = {...alternative};
 
     let isAlternativeDifferent = false;
-    $: isAlternativeDifferent = alternative.overpayment > 0 || alternative.interestRateChange != 0; // todo" should be differen for 'isEditing'
+    $: isAlternativeDifferent = alternative.overpayment !== initialAlternative.overpayment
+        || alternative.interestRateChange !== initialAlternative.interestRateChange
+        || alternative.adjustType !== initialAlternative.adjustType;
 
     const onCancel = () => {
         dispatch('cancel');
     }
 
     const onSubmit = () => {
-        if (isEditing)
-            dispatch('save', alternative);
-        else
-            dispatch('add', alternative);
+        // todo: test why 'Enter' submits
+        dispatch('save', alternative);
     }
 </script>
 
@@ -42,12 +43,12 @@
 
     <div>
         <label>
-            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" />
-            Zmień liczbę rat
-        </label>
-        <label>
             <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-installment" />
             Zmień wysokość raty
+        </label>
+        <label>
+            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" />
+            Zmień liczbę rat
         </label>
     </div>
 
