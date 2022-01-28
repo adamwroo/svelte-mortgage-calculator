@@ -7,6 +7,9 @@
 
     export let alternative;
     export let mortgage;
+    export let send;
+    export let receive;
+    export let isEditing = false;
 
     $: newMortgage = recalculate(mortgage, alternative);
 
@@ -62,6 +65,11 @@
     </p>
 {/if}
 
+
+{#if !isEditing}
+    <div class="bg" in:receive={{key: alternative.id}} out:send={{key: alternative.id}}></div>
+{/if}
+
 <style>
     p {
         margin: 0;
@@ -69,5 +77,14 @@
 
     .warning {
         color: red;
+    }
+
+    .bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        pointer-events: none;
     }
 </style>

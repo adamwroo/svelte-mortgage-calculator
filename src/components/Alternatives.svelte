@@ -9,6 +9,7 @@
 
     let showingDialog = false;
     let alternativeForDialog;
+    let editingId = -1;
 
     const [send, receive] = crossfade({ duration: 1000, fallback: fade });
 
@@ -22,11 +23,13 @@
 
     const openDialog = alternative => {
         alternativeForDialog = alternative ?? getNewAlternative();
+        editingId = alternativeForDialog.id;
         showingDialog = true;
     }
 
     const closeDialog = () => {
         showingDialog = false;
+        editingId = -1;
     }
 
     const saveAlternative = alternative => {
@@ -68,12 +71,12 @@
 
 <dvi class="alternatives">
     {#each alternatives as alternative (alternative.id)}
-        <div class="alternative"
-            animate:flip={{ duration: 1000 }}
-            in:receive={{key: alternative.id}}
-            out:send={{key: alternative.id}}
-        >
-            <Alternative {alternative} {mortgage} on:edit={e => openDialog(e.detail)} on:remove={e => removeAlternative(e.detail)} />
+        <div class="alternative" animate:flip={{ duration: 1000 }}>
+            <Alternative {alternative} {mortgage} {send} {receive}
+                isEditing={alternative.id === editingId}
+                on:edit={e => openDialog(e.detail)}
+                on:remove={e => removeAlternative(e.detail)}
+            />
         </div>
     {/each}
 </dvi>
@@ -83,5 +86,10 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
         gap: 1rem;
+    }
+
+    .alternative {
+        position: relative;
+        background-color: white;
     }
 </style>

@@ -1,4 +1,5 @@
 <script>
+    import { fade } from 'svelte/transition';
     import {createEventDispatcher} from "svelte";
     const dispatch = createEventDispatcher();
     import { clickOutside } from "../actions";
@@ -10,7 +11,7 @@
     const onOutclick = () => dispatch('cancel');
 </script>
 
-<div class="bg">
+<div class="bg" transition:fade>
     <div class="window-wrap" >
         <div
             class="window"
