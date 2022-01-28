@@ -7,9 +7,7 @@
     export let receive;
     export let key;
 
-    const cancel = () => {
-        dispatch('cancel');
-    }
+    const onOutclick = () => dispatch('cancel');
 </script>
 
 <div class="bg">
@@ -23,7 +21,7 @@
         >
             <div class="content"
                 use:clickOutside
-                on:outclick={cancel}
+                on:outclick={onOutclick}
             >
                 <slot></slot>
             </div>

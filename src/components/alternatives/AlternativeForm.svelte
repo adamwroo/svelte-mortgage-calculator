@@ -11,15 +11,11 @@
     let isAlternativeDifferent = false;
     $: isAlternativeDifferent = alternative.overpayment > 0 || alternative.interestRateChange != 0; // todo" should be differen for 'isEditing'
 
-    const cancel = () => {
+    const onCancel = () => {
         dispatch('cancel');
     }
 
-    const discard = () => {
-        dispatch('discard');
-    }
-
-    const submitAlternative = () => {
+    const onSubmit = () => {
         if (isEditing)
             dispatch('save', alternative);
         else
@@ -27,7 +23,7 @@
     }
 </script>
 
-<form on:submit|preventDefault={submitAlternative} on:keydown={e => e.key === 'Escape' && cancel()}>
+<form on:submit|preventDefault={onSubmit} on:keydown={e => e.key === 'Escape' && onCancel()}>
     <label for="amount-form">
         Nadpłata
         <br />
@@ -56,7 +52,7 @@
     </div>
 
     <div class="buttons">
-        <button type="button" on:click={discard}>Anuluj</button>
+        <button type="button" on:click={onCancel}>Anuluj</button>
         <button type="submit" disabled={!isAlternativeDifferent}>Potwierdź</button>
     </div>
 </form>

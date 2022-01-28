@@ -10,5 +10,5 @@
 </script>
 
 <Dialog on:cancel {send} {receive} key={alternative.id}>
-    <AlternativeForm {alternative} {mortgage} {isEditing} on:cancel on:discard on:add on:save />
+    <AlternativeForm {alternative} {mortgage} {isEditing} on:cancel on:add on:save />
 </Dialog>

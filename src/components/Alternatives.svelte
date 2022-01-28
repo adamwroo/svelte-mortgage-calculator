@@ -24,12 +24,6 @@
     const cancelDialog = () => {
         showModal = false;
         isEditing = false;
-        currentAlternative = resetAlternative(); // todo: cancel and discard do the same thing
-    }
-
-    const discardDialog = () => {
-        showModal = false;
-        isEditing = false;
         currentAlternative = resetAlternative();
     }
 
@@ -39,14 +33,14 @@
         if (alternatives.findIndex(a => a.id == alternative.id) === -1) {
             alternatives = [alternative, ...alternatives];
         }
-        discardDialog();
+        cancelDialog();
     }
 
     const saveAlternative = e => {
         let alternative = e.detail;
         const i = alternatives.findIndex(a => a.id == alternative.id);
         alternatives[i] = { ...alternative };
-        discardDialog();
+        cancelDialog();
     }
 
     const removeAlternative = e => {
@@ -76,7 +70,6 @@
         {mortgage}
         {isEditing}
         on:cancel={cancelDialog}
-        on:discard={discardDialog}
         on:add={addAlternative}
         on:save={saveAlternative}
         {send}
