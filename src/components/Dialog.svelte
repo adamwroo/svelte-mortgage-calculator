@@ -1,8 +1,11 @@
 <script>
     import {createEventDispatcher} from "svelte";
     const dispatch = createEventDispatcher();
-    import { fade } from 'svelte/transition';
     import { clickOutside } from "../actions";
+
+    export let send;
+    export let receive;
+    export let key;
 
     const cancel = () => {
         dispatch('cancel');
@@ -10,11 +13,13 @@
 </script>
 
 <div class="bg">
-    <div class="window-wrap" transition:fade>
+    <div class="window-wrap" >
         <div
             class="window"
             role="dialog"
             aria-modal="true"
+            in:receive={{key}}
+            out:send={{key}}
         >
             <div class="content"
                 use:clickOutside

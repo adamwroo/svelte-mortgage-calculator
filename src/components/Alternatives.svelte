@@ -1,4 +1,6 @@
 <script>
+    import { crossfade, fade } from 'svelte/transition';
+    import { flip } from 'svelte/animate';
     import AlternativeDialog from './alternatives/AlternativeDialog.svelte';
     import Alternative from './alternatives/Alternative.svelte';
 
@@ -7,6 +9,8 @@
 
     let showModal = false;
     let isEditing = false;
+
+    const [send, receive] = crossfade({ duration: 1000, fallback: fade });
 
     const getNewId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1;
     const resetAlternative = () => ( {
@@ -33,16 +37,13 @@
         let alternative = e.detail;
         // prevent double submission
         if (alternatives.findIndex(a => a.id == alternative.id) === -1) {
-            alternatives = [...alternatives, alternative];
+            alternatives = [alternative, ...alternatives];
         }
         discardDialog();
     }
 
     const saveAlternative = e => {
         let alternative = e.detail;
-        console.log('saving:');
-        console.log(alternative);
-
         const i = alternatives.findIndex(a => a.id == alternative.id);
         alternatives[i] = { ...alternative };
         discardDialog();
@@ -78,12 +79,20 @@
         on:discard={discardDialog}
         on:add={addAlternative}
         on:save={saveAlternative}
+        {send}
+        {receive}
     />
 {/if}
 
 <dvi class="alternatives">
     {#each alternatives as alternative (alternative.id)}
-        <Alternative {alternative} {mortgage} on:edit={editAlternative} on:remove={removeAlternative} />
+        <div class="alternative"
+            animate:flip={{ duration: 1000 }}
+            in:receive={{key: alternative.id}}
+            out:send={{key: alternative.id}}
+        >
+            <Alternative {alternative} {mortgage} on:edit={editAlternative} on:remove={removeAlternative} />
+        </div>
     {/each}
 </dvi>
 
