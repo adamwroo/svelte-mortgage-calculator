@@ -91,4 +91,10 @@
     .alternative {
         position: relative;
     }
+
+    .alternative {
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+}
 </style>
