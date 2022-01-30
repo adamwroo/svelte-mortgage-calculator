@@ -17,7 +17,9 @@ export const recalculate = (mortgage, alternative) => {
     if (newAmount <= 0 || newInterestRate <= 0 || mortgage.numberOfPayments == 0 || mortgage.monthlyInstallment <= 0) return null;
 
     if (alternative.adjustType === 'adjust-number-of-payments') {
-        const newNumberOfPayments = calculateNumberOfPayments(newAmount, newInterestRate, mortgage.monthlyInstallment);
+        // when interest rate has change, monthly installment has to be recalculated accordingly
+        const recalculatedMonthlyInstallment = getMortgage({ amount: mortgage.amount, interestRate: newInterestRate, numberOfPayments: mortgage.numberOfPayments }).monthlyInstallment;
+        const newNumberOfPayments = calculateNumberOfPayments(newAmount, newInterestRate, recalculatedMonthlyInstallment);
         return getMortgage({ amount: newAmount, interestRate: newInterestRate, numberOfPayments: newNumberOfPayments });
     } else {
         // alternative.adjustType ==='adjust-installment'

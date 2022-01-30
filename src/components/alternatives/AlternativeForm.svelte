@@ -8,11 +8,23 @@
     export let mortgage;
 
     let initialAlternative = {...alternative};
+    let adjustNumberOfPaymentsDisabled = true; // adjusting number of payments is only possible when overpayment is > 0
 
     let isAlternativeDifferent = false;
-    $: isAlternativeDifferent = alternative.overpayment !== initialAlternative.overpayment
+    $: isAlternativeDifferent = (alternative.overpayment > 0 && alternative.overpayment !== initialAlternative.overpayment)
         || alternative.interestRateChange !== initialAlternative.interestRateChange
-        || alternative.adjustType !== initialAlternative.adjustType;
+        || (alternative.adjustType !== initialAlternative.adjustType && alternative.overpayment > 0);
+
+    $: {
+        if (alternative.overpayment > 0) {
+            adjustNumberOfPaymentsDisabled = false;
+        }
+
+        if (alternative.overpayment === 0) {
+            adjustNumberOfPaymentsDisabled = true;
+            alternative.adjustType = 'adjust-installment';
+        }
+    }
 
     const onCancel = () => {
         dispatch('cancel');
@@ -33,6 +45,17 @@
         <small><i>Pozostała kwota: {toPLN(mortgage.amount - alternative.overpayment)}</i></small>
     </label>
 
+    <div>
+        <label>
+            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-installment" />
+            Zmniejsz wysokość raty
+        </label>
+        <label>
+            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" disabled={adjustNumberOfPaymentsDisabled} />
+            Zmniejsz liczbę rat
+        </label>
+    </div>
+
     <label for="interest-rate-change-form">
         Zmiana oprocentowania (+/-)
         <br />
@@ -40,17 +63,6 @@
         <br />
         <small><i>Nowe oprocentowanie: {(mortgage.interestRate + alternative.interestRateChange).toFixed(2)}%</i></small>
     </label>
-
-    <div>
-        <label>
-            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-installment" />
-            Zmień wysokość raty
-        </label>
-        <label>
-            <input type="radio" bind:group={alternative.adjustType} name="adjust-type" value="adjust-number-of-payments" />
-            Zmień liczbę rat
-        </label>
-    </div>
 
     <div class="buttons">
         <button type="button" on:click={onCancel}>Anuluj</button>

@@ -22,7 +22,7 @@
     } );
 
     const openDialog = alternative => {
-        alternativeForDialog = alternative ?? getNewAlternative();
+        alternativeForDialog = alternative ? {...alternative} : getNewAlternative();
         editingId = alternativeForDialog.id;
         showingDialog = true;
     }

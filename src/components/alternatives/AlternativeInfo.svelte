@@ -14,7 +14,7 @@
         if (type === '') text += difference;
         else if (type === 'currency') text += toPLN(difference);
         else if (type === 'percent') text += `${difference.toFixed(2)}%`;
-        else if (type === 'years-and-mmonths') text += toYearsAndMonthsHint(difference);
+        else if (type === 'years-and-months') text += toYearsAndMonthsHint(difference);
 
         return text;
     }
