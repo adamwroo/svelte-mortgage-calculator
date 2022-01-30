@@ -63,7 +63,11 @@
         border-radius: 0.5rem;
         color: var(--color);
         background-color: var(--background-color);
-    }
+        box-shadow:
+            0px 12px 17px 2px hsla(0,0%,0%,0.14), 
+            0px 5px 22px 4px hsla(0,0%,0%,0.12), 
+            0px 7px 8px -4px hsla(0,0%,0%,0.2);
+        }
 
     .content {
         position: relative;
