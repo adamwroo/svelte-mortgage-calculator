@@ -1,9 +1,15 @@
 <script>
+	import { onMount } from 'svelte';
 	import { mortgageBase, alternatives } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
 	import Alternatives from './components/Alternatives.svelte';
+
+	onMount(() => {
+		if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+			window.document.body.classList.toggle('dark-mode');
+	})
 
 	$: mortgage = getMortgage($mortgageBase);
 </script>
@@ -21,10 +27,16 @@
 </main>
 
 <style>
+	* {
+		--main-padding: 1em;
+	}
+
 	main {
 		text-align: center;
-		padding: 1em;
+		padding: var(--main-padding);
 		margin: 0 auto;
+		color: var(--color);
+		background-color: var(--background-color);
 	}
 
 	.with-sidebar {
@@ -40,7 +52,7 @@
 	.sticky {
 		position: -webkit-sticky;
 		position: sticky;
-		top: 0; /* todo: incude parents' margin/padding */
+		top: var(--main-padding);
 	}
 
 	.not-sidebar {

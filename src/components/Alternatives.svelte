@@ -90,6 +90,5 @@
 
     .alternative {
         position: relative;
-        background-color: white;
     }
 </style>

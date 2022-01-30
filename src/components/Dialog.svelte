@@ -46,7 +46,7 @@
         justify-content: center;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.66);
+        background-color: var(--background-color-dialog);
     }
 
     .window-wrap {
@@ -60,9 +60,9 @@
         max-width: min(100%, 40rem);
         max-height: 100%;
         margin: var(--main-margin) auto;
-        color: black;
         border-radius: 0.5rem;
-        background: white;
+        color: var(--color);
+        background-color: var(--background-color);
     }
 
     .content {
