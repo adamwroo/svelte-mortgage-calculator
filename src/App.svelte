@@ -35,8 +35,6 @@
 		text-align: center;
 		padding: var(--main-padding);
 		margin: 0 auto;
-		color: var(--color);
-		background-color: var(--background-color);
 	}
 
 	.with-sidebar {
