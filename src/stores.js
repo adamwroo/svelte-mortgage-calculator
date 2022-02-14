@@ -5,3 +5,6 @@ export const mortgageBase = localStore('mortgage-base', initialMorgageBase);
 
 const initialAlternatives = [];
 export const alternatives = localStore('alternatives', initialAlternatives);
+
+const initialShowAlternatives = true;
+export const showAlternatives = localStore('show-alternatives', initialShowAlternatives);

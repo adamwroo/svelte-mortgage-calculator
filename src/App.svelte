@@ -1,10 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import { mortgageBase, alternatives } from './stores';
+	import { mortgageBase, alternatives, showAlternatives } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
 	import Alternatives from './components/Alternatives.svelte';
+	import Schedule from './components/Schedule.svelte';
+	import AlternativeScheduleSwitch from './components/AlternativeScheduleSwitch.svelte';
 
 	onMount(() => {
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -19,10 +21,15 @@
 		<div class="sticky">
 			<MortgageBase bind:mortgageBase={$mortgageBase} />
 			<MortgageCost {mortgage} />
+			<AlternativeScheduleSwitch bind:showAlternatives={$showAlternatives} />
 		</div>
 	</div>
 	<div class="not-sidebar">
-		<Alternatives bind:alternatives={$alternatives} {mortgage} />
+		{#if $showAlternatives}
+			<Alternatives bind:alternatives={$alternatives} {mortgage} />
+		{:else}
+			<Schedule {mortgage} />
+		{/if}
 	</div>
 </main>
 

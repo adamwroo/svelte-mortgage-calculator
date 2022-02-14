@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher} from "svelte";
+    import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
     import AlternativeInfo from './AlternativeInfo.svelte';
     import { toYearsAndMonthsHint, toPLN } from '../../utils';
@@ -57,7 +57,7 @@
 
 
 {#if !isEditing}
-    <div class="bg" in:receive={{key: alternative.id}} out:send={{key: alternative.id}}></div>
+    <div class="bg" in:receive|local={{key: alternative.id}} out:send|local={{key: alternative.id}}></div>
 {/if}
 
 <style>

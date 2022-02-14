@@ -11,7 +11,7 @@
     let alternativeForDialog;
     let editingId = -1;
 
-    const [send, receive] = crossfade({ duration: 1000, fallback: fade });
+    const [send, receive] = crossfade({ duration: 500, fallback: fade });
 
     const getNewId = () => alternatives.length > 0 ? Math.max(...alternatives.map(t => t.id)) + 1 : 1;
     const getNewAlternative = () => ( {
@@ -69,9 +69,9 @@
     />
 {/if}
 
-<dvi class="alternatives">
+<div class="alternatives">
     {#each alternatives as alternative (alternative.id)}
-        <div class="alternative" animate:flip={{ duration: 1000 }}>
+        <div class="alternative" animate:flip|local={{ duration: 500 }}>
             <Alternative {alternative} {mortgage} {send} {receive}
                 isEditing={alternative.id === editingId}
                 on:edit={e => openDialog(e.detail)}
@@ -79,7 +79,7 @@
             />
         </div>
     {/each}
-</dvi>
+</div>
 
 <style>
     .alternatives {
