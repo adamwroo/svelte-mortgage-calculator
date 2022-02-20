@@ -8,7 +8,8 @@ body:not(.dark-mode) {
 	--color: rgb(5, 5, 5);
 	--background-color: rgb(250, 250, 250);
 	--background-color-dialog: rgba(0, 0, 0, 0.66);
-	--background-color-table: #dddddd;
+	--background-color-table: #ddd;
+	--not-selected-text: #bbb;
 }
 
 body.dark-mode {
@@ -16,6 +17,7 @@ body.dark-mode {
 	--background-color: rgb(5, 5, 5);
 	--background-color-dialog: rgba(30, 30, 30, 0.66);
 	--background-color-table: #222;
+	--not-selected-text: #555;
 }
 
 body {

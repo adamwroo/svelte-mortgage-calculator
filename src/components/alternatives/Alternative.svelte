@@ -57,7 +57,7 @@
 
 
 {#if !isEditing}
-    <div class="bg" in:receive|local={{key: alternative.id}} out:send|local={{key: alternative.id}}></div>
+    <div class="bg" in:receive={{key: alternative.id}} out:send|local={{key: alternative.id}}></div>
 {/if}
 
 <style>

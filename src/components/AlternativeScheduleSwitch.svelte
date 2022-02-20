@@ -23,7 +23,7 @@
     }
 
     span:not(.selected ){
-        color: #555;
+        color: var(--not-selected-text);
         -webkit-transition: 0.4s;
         transition: 0.4s;
     }
