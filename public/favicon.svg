@@ -8,13 +8,15 @@
             fill: #B62121;;
         }
     </style>
-    <line class="favicon-stroke" x1="256" y1="96" x2="64" y2="288" stroke-width="60" stroke-linecap="round"/>
-    <line class="favicon-stroke" x1="256" y1="96" x2="448" y2="288" stroke-width="60" stroke-linecap="round"/>
-    <svg x="128" y="224" width="256" height="256" class="svelte-jnb2lp">
-        <g>
-            <circle class="favicon-fill" cx="65.77460325558383" cy="65.77460325558383" r="40"/>
-            <circle class="favicon-fill" cx="190.22539674441617" cy="190.22539674441617" r="40"/>
-            <line class="favicon-stroke" x1="65.77460325558383" y1="190.22539674441617" x2="190.22539674441617" y2="65.77460325558383" stroke-width="60" stroke-linecap="round"/>
+    <g id="roof">
+        <line class="favicon-stroke" x1="256" y1="27.5" x2="27.5" y2="256" stroke-width="55" stroke-linecap="round"/>
+        <line class="favicon-stroke" x1="256" y1="27.5" x2="484.5" y2="256" stroke-width="55" stroke-linecap="round"/>
+    </g>
+    <svg x="85.33333333333331" y="170.66666666666663" width="341.33333333333337" height="341.33333333333337">
+        <g id="percent">
+            <circle class="favicon-fill" cx="95.94905012128817" cy="95.94905012128817" r="65"/>
+            <circle class="favicon-fill" cx="245.38428321204518" cy="245.38428321204518" r="65"/>
+            <line class="favicon-stroke" x1="69.43254582679263" y1="271.9007875065407" x2="271.9007875065407" y2="69.43254582679263" stroke="black" stroke-width="55" stroke-linecap="round"/>
         </g>
     </svg>
 </svg>
