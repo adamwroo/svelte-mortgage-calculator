@@ -68,12 +68,12 @@
         /> -->
 
         <g id="percent">
-            <circle class="favicon-fill"
+            <circle class="favicon-fill percent-circle"
                 cx="{percentStart + percentCircleRadius / Math.sqrt(2)}"
                 cy="{percentStart + percentCircleRadius / Math.sqrt(2)}"
                 r="{percentCircleRadius}"
             />
-            <circle class="favicon-fill"
+            <circle class="favicon-fill percent-circle"
                 cx="{percentSvg.width - percentStart - percentCircleRadius / Math.sqrt(2)}"
                 cy="{percentSvg.height - percentStart - percentCircleRadius / Math.sqrt(2)}"
                 r="{percentCircleRadius}"
@@ -103,8 +103,41 @@
 
     svg:hover #percent {
         transform: rotate(180deg);
+    }
+
+    svg .percent-circle {
+        /* transition: transform 1s ease-in-out; */
+        animation: in 1s ease-in-out;
         transform-origin: 50% 50%;
         /* without this line, the path would rotate about the entire svg's viewbox */
-        transform-box: view-box;
+        transform-box: fill-box;
+    }
+
+    svg:hover .percent-circle {
+        animation: out 1s ease-in-out;
+    }
+
+    @keyframes in {
+        from {
+            transform: skew(0deg, 0deg)
+        }
+        50% {
+            transform: skew(-15deg, -15deg)
+        }
+        to {
+            transform: skew(0deg, 0deg)
+        }
+    }
+
+    @keyframes out {
+        from {
+            transform: skew(0deg, 0deg)
+        }
+        50% {
+            transform: skew(-15deg, -15deg)
+        }
+        to {
+            transform: skew(0deg, 0deg)
+        }
     }
 </style>
