@@ -40,6 +40,20 @@ a:visited {
 	color: rgb(0,80,160);
 }
 
+nav a, nav a:visited {
+	color: var(--color);
+	text-decoration: none;
+	text-decoration-color: var(--color);
+}
+
+nav a:hover, nav a[aria-current] {
+	text-decoration: underline;
+}
+
+nav a[aria-current] {
+	font-weight: bold;
+}
+
 label {
 	display: block;
 }
@@ -126,4 +140,3 @@ input, button, textarea, select {
 p, h1, h2, h3, h4, h5, h6 {
 	overflow-wrap: break-word;
 }
-/*
