@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { mortgageBase, alternatives, showAlternatives } from './stores';
+	import { mortgageBase, alternatives, showAlternatives, overpayments } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
@@ -28,7 +28,7 @@
 		{#if $showAlternatives}
 			<Alternatives bind:alternatives={$alternatives} {mortgage} />
 		{:else}
-			<Schedule {mortgage} />
+			<Schedule {mortgage} bind:overpayments={$overpayments} />
 		{/if}
 	</div>
 </main>
