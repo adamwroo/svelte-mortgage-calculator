@@ -27,8 +27,8 @@ export const recalculate = (mortgage, alternative) => {
     }
 }
 
-export const getScheduleData = (mortgage, overpayments, adjustType) => {
-    return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, adjustType);
+export const getScheduleData = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
+    return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment);
 }
 
 /**
@@ -64,14 +64,17 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
     return payments;
 }
 
-const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, adjustType) => {
+const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
 
     let payments = [];
     let capitalToRepay = amount;
     for (let i = 1; i <= numberOfPayments; i++) {
-        capitalToRepay -= overpayments[i - 1];
-        console.log(capitalToRepay);
+        capitalToRepay = Math.max(capitalToRepay - overpayments[i - 1], 0);
+
+        if (overpayments[i - 1] > 0 && decreaseInstallmentAfterOverpayment) {
+            monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i);
+        }
 
         let interestInstallment = capitalToRepay * interestRate / 100 / 12;
         let capitalInstallment = Math.min(monthlyInstallment - interestInstallment, capitalToRepay);

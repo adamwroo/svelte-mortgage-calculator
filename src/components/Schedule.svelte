@@ -1,17 +1,18 @@
 <script>
-    import { toPLN } from "../utils";
-    import { selectOnFocus } from '../actions';    
+    import AlternativeInfo from "./alternatives/AlternativeInfo.svelte";
+    import { toPLN, toYearsAndMonthsHint } from "../utils";
+    import { selectOnFocus } from '../actions';
     import { getScheduleData } from '../calculations';
 
     export let mortgage;
     export let overpayments;
 
-    let adjustType = 'adjust-installment' // 'adjust-installment' or 'adjust-number-of-payments'
+    let decreaseInstallmentAfterOverpayment = false; // todo: locale storage?
     let scheduleData = [];
 
-    const updateScheduleData = (mortgage, overpayments, adjustType) => {
+    const updateScheduleData = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
         updateOverpaymentsLength();
-        scheduleData = getScheduleData(mortgage, overpayments, adjustType);
+        scheduleData = getScheduleData(mortgage, overpayments, decreaseInstallmentAfterOverpayment);
     }
 
     const updateOverpaymentsLength = () => {
@@ -27,7 +28,7 @@
         }
     }
 
-    $: updateScheduleData(mortgage, overpayments, adjustType);
+    $: updateScheduleData(mortgage, overpayments, decreaseInstallmentAfterOverpayment);
 
     const clearOverpayments = () => {
         overpayments = new Array(mortgage.numberOfPayments).fill(0);
@@ -35,15 +36,23 @@
 </script>
 
 <h2>Harmonogram spłaty:</h2>
+<p>
+    Liczba rat: {scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})
+    {#if !decreaseInstallmentAfterOverpayment}
+        <br />
+        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
+        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
+    {/if}
+</p>
+<p>
+    Całkowity koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
+    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
+</p>
 <button on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
 <div>
     <label>
-        <input type="radio" bind:group={adjustType} name="adjust-type" value="adjust-installment" />
-        Zmniejsz wysokość raty
-    </label>
-    <label>
-        <input type="radio" bind:group={adjustType} name="adjust-type" value="adjust-number-of-payments" />
-        Zmniejsz liczbę rat
+        <input type="checkbox" bind:checked={decreaseInstallmentAfterOverpayment} />
+        Zmniejsz wysokość raty po nadpłacie
     </label>
 </div>
 
