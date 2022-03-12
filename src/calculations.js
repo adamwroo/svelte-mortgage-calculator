@@ -17,7 +17,7 @@ export const recalculate = (mortgage, alternative) => {
     if (newAmount <= 0 || newInterestRate <= 0 || mortgage.numberOfPayments == 0 || mortgage.monthlyInstallment <= 0) return null;
 
     if (alternative.adjustType === 'adjust-number-of-payments') {
-        // when interest rate has change, monthly installment has to be recalculated accordingly
+        // when interest rate has changed, monthly installment has to be recalculated accordingly
         const recalculatedMonthlyInstallment = getMortgage({ amount: mortgage.amount, interestRate: newInterestRate, numberOfPayments: mortgage.numberOfPayments }).monthlyInstallment;
         const newNumberOfPayments = calculateNumberOfPayments(newAmount, newInterestRate, recalculatedMonthlyInstallment);
         return getMortgage({ amount: newAmount, interestRate: newInterestRate, numberOfPayments: newNumberOfPayments });
@@ -25,6 +25,10 @@ export const recalculate = (mortgage, alternative) => {
         // alternative.adjustType ==='adjust-installment'
         return getMortgage({ amount: newAmount, interestRate: newInterestRate, numberOfPayments: mortgage.numberOfPayments });
     }
+}
+
+export const getScheduleData = (mortgage, overpayments, adjustType) => {
+    return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, adjustType);
 }
 
 /**
@@ -48,14 +52,36 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
 
     let payments = [];
     let capitalToRepay = amount;
-    for (let i = 1; i <= numberOfPayments; i++)
-    {
+    for (let i = 1; i <= numberOfPayments; i++) {
         let interestInstallment = capitalToRepay * interestRate / 100 / 12;
         let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment: monthlyInstallment - interestInstallment};
         payments.push(payment);
 
         // decrease capital for the next month
         capitalToRepay -= payment.capitalInstallment;
+    }
+
+    return payments;
+}
+
+const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, adjustType) => {
+    if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
+
+    let payments = [];
+    let capitalToRepay = amount;
+    for (let i = 1; i <= numberOfPayments; i++) {
+        capitalToRepay -= overpayments[i - 1];
+        console.log(capitalToRepay);
+
+        let interestInstallment = capitalToRepay * interestRate / 100 / 12;
+        let capitalInstallment = Math.min(monthlyInstallment - interestInstallment, capitalToRepay);
+        // decrease capital for the next month
+        capitalToRepay -= capitalInstallment;
+
+        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment, capitalToRepay };
+        payments.push(payment);
+
+        if (capitalToRepay == 0) break;
     }
 
     return payments;
@@ -68,6 +94,6 @@ const calculateNumberOfPayments = (amount, interestRate, monthlyInstallment) => 
     const base = 12 / (12 + interestRate / 100);
     const number = 1 - amount * interestRate / 100 / monthlyInstallment / 12;
 
-    // todo: should roud or up/down?
+    // todo: should round or up/down?
     return Math.round(Math.log(number) / Math.log(base));
 }
