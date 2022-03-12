@@ -13,3 +13,6 @@ export const showAlternatives = localStore('show-alternatives', initialShowAlter
 
 const initialOverpayments = new Array(numberOfPayments).fill(0);
 export const overpayments = localStore('overpayments', initialOverpayments);
+
+const initialDecreaseInstallmentAfterOverpayment= false;
+export const decreaseInstallmentAfterOverpayment = localStore('decrease-installment-after-overpayment', initialDecreaseInstallmentAfterOverpayment);

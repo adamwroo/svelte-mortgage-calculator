@@ -6,8 +6,8 @@
 
     export let mortgage;
     export let overpayments;
+    export let decreaseInstallmentAfterOverpayment;
 
-    let decreaseInstallmentAfterOverpayment = false; // todo: locale storage?
     let scheduleData = [];
 
     const updateScheduleData = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
@@ -37,12 +37,13 @@
 
 <h2>Harmonogram spłaty:</h2>
 <p>
+    Całkowita kwota nadpłaty: { toPLN(overpayments.reduce((sum, overpayment) => sum + overpayment, 0)) }
+</p>
+<p>
     Liczba rat: {scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})
-    {#if !decreaseInstallmentAfterOverpayment}
-        <br />
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
-    {/if}
+    <br />
+    <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
+    <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
 </p>
 <p>
     Całkowity koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }

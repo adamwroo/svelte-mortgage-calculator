@@ -73,7 +73,7 @@ const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInsta
         capitalToRepay = Math.max(capitalToRepay - overpayments[i - 1], 0);
 
         if (overpayments[i - 1] > 0 && decreaseInstallmentAfterOverpayment) {
-            monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i);
+            monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i + 1);
         }
 
         let interestInstallment = capitalToRepay * interestRate / 100 / 12;
