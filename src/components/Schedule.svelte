@@ -13,6 +13,11 @@
     const updateScheduleData = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
         updateOverpaymentsLength();
         scheduleData = getScheduleData(mortgage, overpayments, decreaseInstallmentAfterOverpayment);
+
+        if (scheduleData.length < overpayments.length) {
+            overpayments.splice(scheduleData.length, overpayments.length - scheduleData.length);
+            overpayments = overpayments;
+        }
     }
 
     const updateOverpaymentsLength = () => {
@@ -32,6 +37,21 @@
 
     const clearOverpayments = () => {
         overpayments = new Array(mortgage.numberOfPayments).fill(0);
+    }
+
+    // todo: workaround because the actual values have more than 2 decimal places
+    const getOverpaymentMax = (month) => month == 1 ? Math.floor(mortgage.amount) + 1 : Math.floor(scheduleData[month - 2].capitalToRepay) + 1;
+
+    const updateOverpaymentsMinMaxes = (month) => {
+        if (overpayments[month - 1] < 0) {
+            overpayments[month - 1] = 0;
+            return;
+        }
+
+        let max = getOverpaymentMax(month);
+        if (overpayments[month - 1] > max) {
+            overpayments[month - 1] = max;
+        }
     }
 </script>
 
@@ -79,7 +99,10 @@
                     <input
                         bind:value={overpayments[payment.month - 1]}
                         use:selectOnFocus
-                        type="number" min="0" max="10000000" step="100" autocomplete="off"
+                        type="number" min="0"
+                        max="{getOverpaymentMax(payment.month)}"
+                        autocomplete="off"
+                        on:input={() => updateOverpaymentsMinMaxes(payment.month)} 
                     />
                 </td>
                 <td>{toPLN(payment.capitalToRepay)}</td>
@@ -106,5 +129,9 @@
 
     tr:nth-child(even) {
         background-color: var(--background-color-table);
+    }
+
+    td > input {
+        width: 10ch;
     }
 </style>
