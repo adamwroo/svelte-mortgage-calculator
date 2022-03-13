@@ -6,7 +6,7 @@
 	import MortgageCost from './components/MortgageCost.svelte';
 	import Alternatives from './components/Alternatives.svelte';
 	import Schedule from './components/Schedule.svelte';
-	import AlternativeScheduleSwitch from './components/AlternativeScheduleSwitch.svelte';
+	import ToggleSwitch from './components/shared/ToggleSwitch.svelte';
 
 	onMount(() => {
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -21,10 +21,12 @@
 		<div class="sticky">
 			<MortgageBase bind:mortgageBase={$mortgageBase} />
 			<MortgageCost {mortgage} />
-			<AlternativeScheduleSwitch bind:showAlternatives={$showAlternatives} />
 		</div>
 	</div>
 	<div class="not-sidebar">
+		<h2>
+			<ToggleSwitch bind:checked={$showAlternatives} textFalse="Harmonogram" textTrue="Alternatywy" />
+		</h2>
 		{#if $showAlternatives}
 			<Alternatives bind:alternatives={$alternatives} {mortgage} />
 		{:else}

@@ -24,7 +24,7 @@
 
     div {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap; /* todo: find better solution */
         gap: 0.5rem;
         justify-content: center;
         align-items: center;

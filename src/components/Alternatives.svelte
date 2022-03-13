@@ -54,7 +54,6 @@
     }
 </script>
 
-<h2>Alternatywy:</h2>
 <button on:click={() => openDialog()}>Dodaj</button>
 <button on:click={removeAllAlternatives}>Usuń wszystkie</button>
 
