@@ -97,6 +97,6 @@ const calculateNumberOfPayments = (amount, interestRate, monthlyInstallment) => 
     const base = 12 / (12 + interestRate / 100);
     const number = 1 - amount * interestRate / 100 / monthlyInstallment / 12;
 
-    // todo: should round or up/down?
-    return Math.round(Math.log(number) / Math.log(base));
+    // todo: should round or floor/ceil?
+    return Math.max(Math.floor(Math.log(number) / Math.log(base)), 1);
 }
