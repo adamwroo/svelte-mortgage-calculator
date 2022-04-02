@@ -6,10 +6,16 @@
     export let max;
     export let id = null;
     export let step = null;
-  
+
     $: number = value;
 
-    const changeNumber = () => {
+    const handleInput = () => {
+        // allow update while typing if in {min, max}
+        if (number >= min && number <= max) value = number;
+    }
+
+    const handleChange = () => {
+        // set to min or max if necessary
         if (number < min) {
             number = min;
         } else if (number > max) {
@@ -24,7 +30,8 @@
     type="number"
     id={id}
     bind:value={number}
-    on:change={changeNumber}
+    on:input={handleInput}
+    on:change={handleChange}
     min={min}
     max={max}
     step={step}
