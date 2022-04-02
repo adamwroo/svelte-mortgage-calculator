@@ -18,12 +18,13 @@
             return;
         }
 
-        if (decimalPlaces != -1) {
-            const significantDigits = number * (10 ** decimalPlaces);
-            const allowedSignificantDigits = Math.floor(significantDigits);
+        // todo: probably safer to manipulate input.value
+        if (decimalPlaces > 0) {
+            const significantDigits = Math.round(number * (10 ** (1 + +decimalPlaces)));
+            const allowedSignificantDigits = Math.round(Math.round(number * (10 ** +decimalPlaces)) * 10);
 
             if (significantDigits != allowedSignificantDigits) {
-                number = allowedSignificantDigits / (10 ** decimalPlaces);
+                number = value; // use previous value
             }
         }
 
@@ -41,7 +42,7 @@
         value = number;
     }
 
-    const handleKeyDown = (e) => {
+    const handleKeydown = (e) => {
         if (decimalPlaces == 0 && (e.key == ',' || e.key == '.')) e.preventDefault();
     }
 </script>
@@ -52,7 +53,7 @@
     bind:value={number}
     on:input={handleInput}
     on:change={handleChange}
-    on:keydown={handleKeyDown}
+    on:keydown={handleKeydown}
     min={min}
     max={max}
     step={step}
