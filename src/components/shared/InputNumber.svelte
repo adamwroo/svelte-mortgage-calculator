@@ -10,6 +10,8 @@
 
     $: number = value;
 
+    let inputEl;
+
     const handleInput = () => {
         if (number < min) return; // allow but don't update value
 
@@ -18,14 +20,11 @@
             return;
         }
 
-        // todo: probably safer to manipulate input.value
-        if (decimalPlaces > 0) {
-            const significantDigits = Math.round(number * (10 ** (1 + +decimalPlaces)));
-            const allowedSignificantDigits = Math.round(Math.round(number * (10 ** +decimalPlaces)) * 10);
-
-            if (significantDigits != allowedSignificantDigits) {
-                number = value; // use previous value
-            }
+        let inputElValue = inputEl.value;
+        let index = Math.max(inputElValue.indexOf(','), inputElValue.indexOf('.'));
+        if (index > -1 && inputElValue.length - index - 1 > +decimalPlaces) {
+            number = value; // use previous value
+            return;
         }
 
         value = number;
@@ -39,6 +38,9 @@
             number = max;
         }
 
+        // clean up formatting
+        inputEl.value = number.toString();
+
         value = number;
     }
 
@@ -48,6 +50,7 @@
 </script>
 
 <input
+    bind:this={inputEl}
     type="number"
     id={id}
     bind:value={number}
