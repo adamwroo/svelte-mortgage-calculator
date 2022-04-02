@@ -55,7 +55,6 @@
     }
 </script>
 
-<h2>Harmonogram spłaty:</h2>
 <p>
     Całkowita kwota nadpłaty: { toPLN(overpayments.reduce((sum, overpayment) => sum + overpayment, 0)) }
 </p>

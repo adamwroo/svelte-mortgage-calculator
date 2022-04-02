@@ -2,11 +2,14 @@
     export let checked;
     export let textFalse;
     export let textTrue;
+
+    // todo: switching to 'flex-direction: column;' only works one way
+    let divElHeight, switchElHeight;
 </script>
 
-<div>
+<div bind:clientHeight={divElHeight} class:col={divElHeight > 2 * switchElHeight}>
     <span class:selected={!checked}>{textFalse}</span>
-    <label class="switch">
+    <label bind:clientHeight={switchElHeight} class="switch">
         <input type="checkbox" bind:checked={checked} />
         <span class="slider round" />
     </label>
@@ -25,10 +28,15 @@
     div {
         display: flex;
         flex-wrap: wrap; /* todo: find better solution */
+        flex-direction: row;
         gap: 0.5rem;
         justify-content: center;
         align-items: center;
         padding: 0.5rem;
+    }
+
+    div.col {
+        flex-direction: column;
     }
 
     /* Toggle Switch, see: https://www.w3schools.com/howto/howto_css_switch.asp */
