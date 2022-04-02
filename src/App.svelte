@@ -65,5 +65,6 @@
 	.not-sidebar {
 		flex-basis: 0;
 		flex-grow: 999;
+		max-width: 100%;
 	}
 </style>

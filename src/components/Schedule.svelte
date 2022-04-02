@@ -111,14 +111,19 @@
 </div>
 
 <style>
-    div.table-container {
+    .table-container {
         display: flex;
-        justify-content: center;
+        /* 'center' breaks scrolling (some items not visible); 'safe center' not yet fully supported */
+        /* justify-content: safe center; */
+        overflow-x: auto;
     }
-
+    
     table {
         border-collapse: collapse;
-    }
+        /* workaround because 'justify-content: safe center' not yet fully supported */
+        margin-left: auto;
+        margin-right: auto;
+}
 
     td, th {
         border: 1px solid var(--background-color-table);
