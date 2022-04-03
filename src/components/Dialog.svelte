@@ -4,9 +4,9 @@
     const dispatch = createEventDispatcher();
     import { clickOutside } from "../actions";
 
-    export let send;
-    export let receive;
-    export let key;
+    export let send = () => {};
+    export let receive = () => {};
+    export let key = null;
 
     const onOutclick = () => dispatch('cancel');
 </script>

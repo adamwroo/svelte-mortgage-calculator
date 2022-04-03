@@ -1,6 +1,7 @@
 <script>
-    import AlternativeInfo from "./alternatives/AlternativeInfo.svelte";
-    import { toPLN, toYearsAndMonthsHint } from "../utils";
+    import AlternativeInfo from './alternatives/AlternativeInfo.svelte';
+    import ScheduleDialog from './schedule/ScheduleDialog.svelte';
+    import { toPLN, toYearsAndMonthsHint } from '../utils';
     import { selectOnFocus } from '../actions';
     import { getScheduleData } from '../calculations';
 
@@ -8,6 +9,7 @@
     export let overpayments = [];
     export let decreaseInstallmentAfterOverpayment;
 
+    let showingDialog = false;
     let scheduleData = [];
 
     const updateScheduleData = (mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment) => {
@@ -20,6 +22,33 @@
 
     const clearOverpayments = () => {
         overpayments = new Array(mortgage.numberOfPayments).fill(0);
+    }
+
+    const openDialog = () => {
+        showingDialog = true;
+    }
+
+    const closeDialog = () => {
+        showingDialog = false;
+    }
+
+    const updateSchedule = overpayment => {
+        const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
+        let newOverpayments = [...overpayments];
+
+        for (let i = 0; i < newOverpayments.length; i++) {
+            const month = i + 1;
+            if (month % overpaymentFrequency == 0) {
+                if (overwrite) {
+                    newOverpayments[i] = overpaymentAmount;
+                } else {
+                    newOverpayments[i] += overpaymentAmount;
+                }
+            }
+        }
+
+        overpayments = newOverpayments;
+        closeDialog()
     }
 </script>
 
@@ -42,7 +71,17 @@
         Zmniejsz wysokość raty po nadpłacie
     </label>
 </div>
+
+<button class="primary" on:click={() => openDialog()}>Dodaj</button>
 <button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
+
+{#if showingDialog}
+    <ScheduleDialog
+        mortgageAmount={mortgage.amount}
+        on:cancel={closeDialog}
+        on:save={e => updateSchedule(e.detail)}
+    />
+{/if}
 
 <div class="table-container">
     <table>

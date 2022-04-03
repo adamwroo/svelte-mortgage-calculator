@@ -1,5 +1,5 @@
 export function clickOutside(node) {
-    const handleClick = (event) => {        
+    const handleClick = (event) => {
         if (node && !node.contains(event.target) && !event.defaultPrevented) {
             node.dispatchEvent(new CustomEvent("outclick"));
         }
@@ -24,4 +24,6 @@ export function selectOnFocus(node) {
         destroy: () => node.removeEventListener('focus', onFocus)   // this will be executed when the node is removed from the DOM
       }
     }
-  }
+}
+
+export const focusOnInit = (node) => node && typeof node.focus === 'function' && node.focus();

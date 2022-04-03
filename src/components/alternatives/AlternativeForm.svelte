@@ -1,8 +1,8 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import { toPLN } from '../../utils';
-    import { selectOnFocus } from '../../actions';
+    import { selectOnFocus, focusOnInit } from '../../actions';
 
     export let alternative;
     export let mortgage;
@@ -40,7 +40,7 @@
     <label for="amount-form">
         Nadpłata
         <br />
-        <input bind:value={alternative.overpayment} use:selectOnFocus type="number" id="amount-form" min="0" max={mortgage.amount} step="100" autocomplete="off" />
+        <input bind:value={alternative.overpayment} use:selectOnFocus use:focusOnInit type="number" id="amount-form" min="0" max={mortgage.amount} step="100" autocomplete="off" />
         <br />
         <small><i>Pozostała kwota: {toPLN(mortgage.amount - alternative.overpayment)}</i></small>
     </label>
