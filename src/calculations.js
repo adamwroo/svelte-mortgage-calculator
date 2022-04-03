@@ -31,11 +31,15 @@ export const getScheduleData = (mortgage, overpayments, decreaseInstallmentAfter
     return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment);
 }
 
+const round = (number) => {
+    return Number.parseFloat(number.toFixed(2));
+}
+
 /**
 * see: https://finanse.rankomat.pl/poradniki/obliczyc-rate-kredytu-gotowkowego
 */
 const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => {
-    if (numberOfPayments <= 0) return 0;
+    if (amount == 0 || numberOfPayments == 0) return 0;
 
     // sigma notation summation
     let sigma = 0.0;
@@ -44,7 +48,7 @@ const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => 
         sigma += Math.pow(1.0 + interestRate / 100 / 12, -i);
     }
 
-    return amount / sigma;
+    return round(amount / sigma);
 }
 
 const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
@@ -53,12 +57,12 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
     let payments = [];
     let capitalToRepay = amount;
     for (let i = 1; i <= numberOfPayments; i++) {
-        let interestInstallment = capitalToRepay * interestRate / 100 / 12;
-        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment: monthlyInstallment - interestInstallment};
+        let interestInstallment = round(capitalToRepay * interestRate / 100 / 12);
+        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment: round(monthlyInstallment - interestInstallment)};
         payments.push(payment);
 
         // decrease capital for the next month
-        capitalToRepay -= payment.capitalInstallment;
+        capitalToRepay = round(capitalToRepay - payment.capitalInstallment);
     }
 
     return payments;
@@ -68,26 +72,31 @@ const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInsta
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
 
     let payments = [];
+    let newOverpayments = [];
     let capitalToRepay = amount;
     for (let i = 1; i <= numberOfPayments; i++) {
-        capitalToRepay = Math.max(capitalToRepay - overpayments[i - 1], 0);
+        // overpayment happens first
+        let overpayment = overpayments?.[i - 1] ?? 0;
+        overpayment = Math.min(overpayment, capitalToRepay); // overpayment can't be larger than capital left to repay
+        newOverpayments.push(overpayment);
 
-        if (overpayments[i - 1] > 0 && decreaseInstallmentAfterOverpayment) {
+        capitalToRepay = round(capitalToRepay - overpayment);
+
+        if (overpayment > 0 && decreaseInstallmentAfterOverpayment) {
             monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i + 1);
         }
 
-        let interestInstallment = capitalToRepay * interestRate / 100 / 12;
-        let capitalInstallment = Math.min(monthlyInstallment - interestInstallment, capitalToRepay);
-        // decrease capital for the next month
-        capitalToRepay -= capitalInstallment;
+        let interestInstallment = round(capitalToRepay * interestRate / 100 / 12);
+        let capitalInstallment = Math.min(round(monthlyInstallment - interestInstallment), capitalToRepay);
 
-        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment, capitalToRepay };
+        capitalToRepay = i == numberOfPayments ? 0 : round(capitalToRepay - capitalInstallment);
+        let payment = { month: i, interestInstallment, capitalInstallment, capitalToRepay };
         payments.push(payment);
 
         if (capitalToRepay == 0) break;
     }
 
-    return payments;
+    return { payments, newOverpayments };
 }
 
 /**
