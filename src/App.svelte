@@ -54,7 +54,7 @@
 
 	.sidebar {
 		flex-grow: 1;
-		min-width: 25rem;
+		min-width: min(100%, 25rem);
 	}
 
 	.sticky {
