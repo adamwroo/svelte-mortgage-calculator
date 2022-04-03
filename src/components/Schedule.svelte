@@ -56,7 +56,7 @@
         </tr>
         {#each scheduleData as payment (payment.month)}
             <tr>
-                <td>{payment.month}</td>
+                <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
                 <td>
                     <input
                         bind:value={overpayments[payment.month - 1]}
@@ -104,5 +104,9 @@
 
     td > input {
         width: 10ch;
+    }
+
+    .hint {
+        cursor: help;
     }
 </style>
