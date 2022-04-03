@@ -54,8 +54,8 @@
     }
 </script>
 
-<button on:click={() => openDialog()}>Dodaj</button>
-<button on:click={removeAllAlternatives}>Usuń wszystkie</button>
+<button class="primary" on:click={() => openDialog()}>Dodaj</button>
+<button class="secondary" on:click={removeAllAlternatives}>Usuń wszystkie</button>
 
 {#if showingDialog}
     <AlternativeDialog

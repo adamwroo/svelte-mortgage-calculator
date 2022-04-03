@@ -96,12 +96,12 @@
     }
 
     span.selected {
-        color: var(--color);
+        color: var(--text-color);
         transition: color var(--transition-duration);
     }
 
     span:not(.selected ){
-        color: var(--not-selected-text);
+        color: var(--not-selected-text-color);
         transition: color var(--transition-duration);
     }
 </style>

@@ -23,8 +23,8 @@
 </script>
 
 <p>
-    <button on:click={edit}>Edytuj</button>
-    <button on:click={remove}>Usuń</button>
+    <button class="primary" on:click={edit}>Edytuj</button>
+    <button class="secondary" on:click={remove}>Usuń</button>
 </p>
 {#if newMortgage == null}
     <p class="warning">Niewłaściwe dane</p>

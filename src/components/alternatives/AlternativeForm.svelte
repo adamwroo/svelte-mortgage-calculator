@@ -65,8 +65,8 @@
     </label>
 
     <div class="buttons">
-        <button type="button" on:click={onCancel}>Anuluj</button>
-        <button type="submit" disabled={!isAlternativeDifferent}>Potwierdź</button>
+        <button type="button" class="secondary" on:click={onCancel}>Anuluj</button>
+        <button type="submit" class="primary" disabled={!isAlternativeDifferent}>Potwierdź</button>
     </div>
 </form>
 

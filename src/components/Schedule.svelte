@@ -42,7 +42,7 @@
         Zmniejsz wysokość raty po nadpłacie
     </label>
 </div>
-<button on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
+<button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
 
 <div class="table-container">
     <table>

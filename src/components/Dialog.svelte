@@ -61,7 +61,6 @@
         max-height: 100%;
         margin: var(--main-margin) auto;
         border-radius: 0.5rem;
-        color: var(--color);
         background-color: var(--background-color-dialog);
         }
 
