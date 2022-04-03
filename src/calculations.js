@@ -77,6 +77,7 @@ const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInsta
     for (let i = 1; i <= numberOfPayments; i++) {
         // overpayment happens first
         let overpayment = overpayments?.[i - 1] ?? 0;
+        overpayment = Math.max(overpayment, 0);
         overpayment = Math.min(overpayment, capitalToRepay); // overpayment can't be larger than capital left to repay
         newOverpayments.push(overpayment);
 
