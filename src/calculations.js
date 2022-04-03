@@ -11,8 +11,8 @@ export const getMortgage = (mortgageBase) => {
 }
 
 export const recalculate = (mortgage, alternative) => {
-    const newAmount = Math.max(mortgage.amount - alternative.overpayment, 0);
-    const newInterestRate = Math.max(mortgage.interestRate + alternative.interestRateChange, 0);
+    const newAmount = round(Math.max(mortgage.amount - alternative.overpayment, 0));
+    const newInterestRate = round(Math.max(mortgage.interestRate + alternative.interestRateChange, 0));
 
     if (newAmount <= 0 || newInterestRate <= 0 || mortgage.numberOfPayments == 0 || mortgage.monthlyInstallment <= 0) return null;
 
