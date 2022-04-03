@@ -8,6 +8,7 @@
     export let mortgage;
     export let overpayments = [];
     export let decreaseInstallmentAfterOverpayment;
+    export let highlightRowWithOverpay;
 
     let showingDialog = false;
     let scheduleData = [];
@@ -71,6 +72,12 @@
         Zmniejsz wysokość raty po nadpłacie
     </label>
 </div>
+<div>
+    <label>
+        <input type="checkbox" bind:checked={highlightRowWithOverpay} />
+        Zaznacz miesiące z nadpłatą
+    </label>
+</div>
 
 <button class="primary" on:click={() => openDialog()}>Dodaj</button>
 <button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
@@ -94,7 +101,7 @@
             <th>Pozostały kapitał</th>
         </tr>
         {#each scheduleData as payment (payment.month)}
-            <tr>
+            <tr class:with-overpayment={highlightRowWithOverpay && overpayments[payment.month - 1] > 0}>
                 <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
                 <td>
                     <input
@@ -129,7 +136,11 @@
         /* workaround because 'justify-content: safe center' not yet fully supported */
         margin-left: auto;
         margin-right: auto;
-}
+    }
+
+    tr.with-overpayment td {
+        color: var(--accent-color);
+    }
 
     td, th {
         border: 1px solid var(--background-color-table);
@@ -143,6 +154,7 @@
 
     td > input {
         width: 10ch;
+        margin: 0;
     }
 
     .hint {

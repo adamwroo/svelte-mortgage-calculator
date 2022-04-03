@@ -16,3 +16,6 @@ export const overpayments = localStore('overpayments', initialOverpayments);
 
 const initialDecreaseInstallmentAfterOverpayment= false;
 export const decreaseInstallmentAfterOverpayment = localStore('decrease-installment-after-overpayment', initialDecreaseInstallmentAfterOverpayment);
+
+const initialhighlightRowWithOverpay = false;
+export const highlightRowWithOverpay = localStore('highlight-row-with-overpay', initialhighlightRowWithOverpay);
