@@ -6,7 +6,7 @@ export const getMortgage = (mortgageBase) => {
         ...mortgageBase,
         monthlyInstallment,
         monthlyPayments,
-        getInterestCost: () => monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)
+        getInterestCost: () => round(monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0))
     };
 }
 

@@ -40,7 +40,7 @@ button.secondary, button.secondary:not(:disabled):active, button.secondary:focus
 	opacity: 1;
 	border-radius: 8px;
 	cursor: pointer;
-	transition: opacity 0.3s, transform 0.3s;
+	transition: opacity 0.1s, transform 0.1s;
 	transform-origin: center center;
 }
 
@@ -53,7 +53,7 @@ button.primary, button.primary:not(:disabled):active, button.primary:focus {
 button.secondary, button.secondary:not(:disabled):active, button.secondary:focus {
 	background-color: var(--background-color-card);
 	color: var(--text-color);
-	border: 1px solid var(--accent-color);
+	border: 1px solid var(--background-color);
 }
 
 button.primary:disabled, button.primary:disabled:hover {
