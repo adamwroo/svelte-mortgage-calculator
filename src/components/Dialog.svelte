@@ -46,7 +46,7 @@
         justify-content: center;
         width: 100vw;
         height: 100vh;
-        background-color: var(--background-color-dialog);
+        background-color: var(--background-color-dialog-bg);
     }
 
     .window-wrap {
@@ -62,11 +62,7 @@
         margin: var(--main-margin) auto;
         border-radius: 0.5rem;
         color: var(--color);
-        background-color: var(--background-color);
-        box-shadow:
-            0px 12px 17px 2px hsla(0,0%,0%,0.14), 
-            0px 5px 22px 4px hsla(0,0%,0%,0.12), 
-            0px 7px 8px -4px hsla(0,0%,0%,0.2);
+        background-color: var(--background-color-dialog);
         }
 
     .content {

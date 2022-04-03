@@ -54,6 +54,7 @@
 
 	.sidebar {
 		flex-grow: 1;
+		min-width: 25rem;
 	}
 
 	.sticky {
@@ -66,5 +67,9 @@
 		flex-basis: 0;
 		flex-grow: 999;
 		max-width: 100%;
+	}
+
+	h2 {
+		padding: 0 0.5rem 0.5rem 0.5rem;
 	}
 </style>

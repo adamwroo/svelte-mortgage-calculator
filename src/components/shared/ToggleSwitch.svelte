@@ -21,7 +21,7 @@
         --switch-width: 2.5em;
         --switch-height: 1.25em;
         --switch-padding: 0.15em;
-        --switch-color: #2196f3;
+        --switch-color: var(--accent-color);;
         --transition-duration: 0.4s;
     }
 
@@ -32,11 +32,11 @@
         gap: 0.5rem;
         justify-content: center;
         align-items: center;
-        padding: 0.5rem;
     }
 
     div.col {
         flex-direction: column;
+        gap: 0.25rem;
     }
 
     /* Toggle Switch, see: https://www.w3schools.com/howto/howto_css_switch.asp */
@@ -80,7 +80,7 @@
     }
 
     input:focus + .slider {
-        box-shadow: 0 0 5px var(--switch-color);
+        box-shadow: 0 0 1px var(--switch-color);
     }
 
     input:checked + .slider:before {
