@@ -31,7 +31,8 @@ export const getScheduleData = (mortgage, overpayments, decreaseInstallmentAfter
     return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment);
 }
 
-const round = (number) => {
+// todo: shoudn't be exported, should be used only internally
+export const round = (number) => {
     return Number.parseFloat(number.toFixed(2));
 }
 
@@ -65,12 +66,13 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
         capitalToRepay = round(capitalToRepay - payment.capitalInstallment);
     }
 
+    // todo: check for leftover (capitalToRepay in the last month)
     return payments;
 }
 
 const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
-
+    
     let payments = [];
     let newOverpayments = [];
     let capitalToRepay = amount;
@@ -80,23 +82,24 @@ const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInsta
         overpayment = Math.max(overpayment, 0);
         overpayment = Math.min(overpayment, capitalToRepay); // overpayment can't be larger than capital left to repay
         newOverpayments.push(overpayment);
-
+        
         capitalToRepay = round(capitalToRepay - overpayment);
-
+        
         if (overpayment > 0 && decreaseInstallmentAfterOverpayment) {
             monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i + 1);
         }
-
+        
         let interestInstallment = round(capitalToRepay * interestRate / 100 / 12);
         let capitalInstallment = Math.min(round(monthlyInstallment - interestInstallment), capitalToRepay);
-
+        
         capitalToRepay = i == numberOfPayments ? 0 : round(capitalToRepay - capitalInstallment);
         let payment = { month: i, interestInstallment, capitalInstallment, capitalToRepay };
         payments.push(payment);
-
+        
+        // todo: check for leftover (capitalToRepay in the last month)
         if (capitalToRepay == 0) break;
     }
-
+    
     return { payments, newOverpayments };
 }
 

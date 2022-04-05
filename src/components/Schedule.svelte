@@ -3,7 +3,7 @@
     import ScheduleDialog from './schedule/ScheduleDialog.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../utils';
     import { selectOnFocus } from '../actions';
-    import { getScheduleData } from '../calculations';
+    import { getScheduleData, round } from '../calculations';
 
     export let mortgage;
     export let overpayments = [];
@@ -64,7 +64,8 @@
 </p>
 <p>
     Całkowity koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
-    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
+    <!-- todo: don't show when 0 -->
+    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={round(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0))} type="currency" />
 </p>
 <div>
     <label>
