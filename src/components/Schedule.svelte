@@ -63,7 +63,7 @@
     <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
 </p>
 <p>
-    Całkowity koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
+    Koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
     <!-- todo: don't show when 0 -->
     <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={round(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0))} type="currency" />
 </p>

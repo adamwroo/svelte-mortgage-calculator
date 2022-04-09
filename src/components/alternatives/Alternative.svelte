@@ -50,7 +50,7 @@
         {/if}
     </p>
     <p>
-        Całkowity koszt odsetek: { toPLN(newMortgage.getInterestCost()) }
+        Koszt odsetek: { toPLN(newMortgage.getInterestCost()) }
         <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={newMortgage.getInterestCost()} type="currency" />
     </p>
 {/if}
