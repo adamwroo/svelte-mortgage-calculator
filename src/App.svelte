@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { mortgageBase, alternatives, showAlternatives, overpayments, decreaseInstallmentAfterOverpayment, highlightRowWithOverpay } from './stores';
+	import { mortgageBase, alternatives, showSchedule, overpayments, decreaseInstallmentAfterOverpayment, highlightRowWithOverpay } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
 	import MortgageCost from './components/MortgageCost.svelte';
@@ -25,16 +25,16 @@
 	</div>
 	<div class="not-sidebar">
 		<h2>
-			<ToggleSwitch bind:checked={$showAlternatives} textFalse="Harmonogram" textTrue="Alternatywy" />
+			<ToggleSwitch bind:checked={$showSchedule} textFalse="Alternatywy" textTrue="Harmonogram" />
 		</h2>
-		{#if $showAlternatives}
-			<Alternatives bind:alternatives={$alternatives} {mortgage} />
-		{:else}
+		{#if $showSchedule}
 			<Schedule {mortgage}
 				bind:overpayments={$overpayments}
 				bind:decreaseInstallmentAfterOverpayment={$decreaseInstallmentAfterOverpayment}
 				bind:highlightRowWithOverpay={$highlightRowWithOverpay}
 			/>
+		{:else}
+			<Alternatives bind:alternatives={$alternatives} {mortgage} />
 		{/if}
 	</div>
 </main>
