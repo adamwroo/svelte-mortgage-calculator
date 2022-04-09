@@ -16,7 +16,8 @@
         if (number < min) return; // allow but don't update value
 
         if (number > max) {
-            number = value; // use previous value
+            number = max; // set to max
+            value = number;
             return;
         }
 
@@ -40,6 +41,10 @@
 
         // clean up formatting
         inputEl.value = number.toString();
+
+        if (value === number) {
+            return; // skip to avoid unnecessary assignment
+        }
 
         value = number;
     }
