@@ -6,7 +6,7 @@ export const getMortgage = (mortgageBase) => {
         ...mortgageBase,
         monthlyInstallment,
         monthlyPayments,
-        getInterestCost: () => round(monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0))
+        getInterestCost: () => monthlyPayments.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)
     };
 }
 
@@ -40,7 +40,7 @@ export const round = (number) => {
 * see: https://finanse.rankomat.pl/poradniki/obliczyc-rate-kredytu-gotowkowego
 */
 const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => {
-    if (amount == 0 || numberOfPayments == 0) return 0;
+    if (amount <= 0 || numberOfPayments <= 0) return 0;
 
     // sigma notation summation
     let sigma = 0.0;
@@ -49,57 +49,62 @@ const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => 
         sigma += Math.pow(1.0 + interestRate / 100 / 12, -i);
     }
 
-    return round(amount / sigma);
+    return amount / sigma;
 }
 
 const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
-    if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
+    if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return []; // todo: test if [] returned
 
     let payments = [];
     let capitalToRepay = amount;
+
     for (let i = 1; i <= numberOfPayments; i++) {
-        let interestInstallment = round(capitalToRepay * interestRate / 100 / 12);
-        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment: round(monthlyInstallment - interestInstallment)};
+        let interestInstallment = capitalToRepay * interestRate / 100 / 12;
+        let payment = { month: i, interestInstallment: interestInstallment, capitalInstallment: monthlyInstallment - interestInstallment };
         payments.push(payment);
 
-        // decrease capital for the next month
-        capitalToRepay = round(capitalToRepay - payment.capitalInstallment);
+        // decrease capital for next month
+        capitalToRepay = capitalToRepay - payment.capitalInstallment;
     }
 
-    // todo: check for leftover (capitalToRepay in the last month)
     return payments;
 }
 
 const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
-    
+
     let payments = [];
-    let newOverpayments = [];
     let capitalToRepay = amount;
+    let newOverpayments = [];
+
     for (let i = 1; i <= numberOfPayments; i++) {
         // overpayment happens first
         let overpayment = overpayments?.[i - 1] ?? 0;
         overpayment = Math.max(overpayment, 0);
-        overpayment = Math.min(overpayment, capitalToRepay); // overpayment can't be larger than capital left to repay
+        // overpayment can't be larger than capital left to repay
+        overpayment = Math.min(overpayment, capitalToRepay);
         newOverpayments.push(overpayment);
-        
-        capitalToRepay = round(capitalToRepay - overpayment);
-        
+
+        // decrease capital by overpayment (this happens BEFORE installment is paid)
+        capitalToRepay = capitalToRepay - overpayment;
+
+        // recalculate installment after overpayment (if selected)
         if (overpayment > 0 && decreaseInstallmentAfterOverpayment) {
             monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i + 1);
         }
-        
-        let interestInstallment = round(capitalToRepay * interestRate / 100 / 12);
-        let capitalInstallment = Math.min(round(monthlyInstallment - interestInstallment), capitalToRepay);
-        
-        capitalToRepay = i == numberOfPayments ? 0 : round(capitalToRepay - capitalInstallment);
+
+        let interestInstallment = capitalToRepay * interestRate / 100 / 12;
+        // installment can't be larger than capital left to repay (relevant for last month)
+        let capitalInstallment = Math.min(monthlyInstallment - interestInstallment, capitalToRepay);
+
+        // decrease capital for next month
+        capitalToRepay = capitalToRepay - capitalInstallment;
         let payment = { month: i, interestInstallment, capitalInstallment, capitalToRepay };
         payments.push(payment);
-        
-        // todo: check for leftover (capitalToRepay in the last month)
+
         if (capitalToRepay == 0) break;
     }
-    
+
     return { payments, newOverpayments };
 }
 

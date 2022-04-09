@@ -9,6 +9,7 @@
 	import ToggleSwitch from './components/shared/ToggleSwitch.svelte';
 
 	onMount(() => {
+		// todo: extract to a component
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches)
 			window.document.body.classList.toggle('dark-mode');
 	})

@@ -64,8 +64,8 @@
 </p>
 <p>
     Koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
-    <!-- todo: don't show when 0 -->
-    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={round(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0))} type="currency" />
+    <!-- todo: sum shouldn't take place here (in calculations? object?) -->
+    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
 </p>
 <div>
     <label>
