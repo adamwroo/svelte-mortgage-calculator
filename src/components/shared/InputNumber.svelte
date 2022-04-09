@@ -13,7 +13,7 @@
     let inputEl;
 
     const handleInput = () => {
-        if (number < min) return; // allow but don't update value
+        if (number < min) return; // allow but don't update value (allows user to continue typing and fixes, if necessary, in on:change)
 
         if (number > max) {
             number = max; // set to max
@@ -23,8 +23,8 @@
 
         let inputElValue = inputEl.value;
         let index = Math.max(inputElValue.indexOf(','), inputElValue.indexOf('.'));
-        if (index > -1 && inputElValue.length - index - 1 > +decimalPlaces) {
-            number = value; // use previous value
+        if (index > -1 && inputElValue.length - index - 1 > decimalPlaces) {
+            number = value; // too many decimal places, use previous value
             return;
         }
 
