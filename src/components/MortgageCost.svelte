@@ -28,7 +28,7 @@
     .mortgage-pie-chart {
         display: flex;
         justify-content: center;
-        height: clamp(25vh, 30vh, 10em);
-        font-size: clamp(0.75em, 2.5vw, 0.9em); 
+        height: clamp(40vw, 25vh, 10em);
+        font-size: clamp(0.65em, 2.5vw, 0.9em); 
     }
 </style>
