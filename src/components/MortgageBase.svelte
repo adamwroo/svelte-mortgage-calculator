@@ -16,7 +16,7 @@
 <label for="interest-rate-base">
     <span>Oprocentowanie</span>
     <InputNumber bind:value={mortgageBase.interestRate} id="interest-rate-base" min={1} max={50} step={0.01} decimalPlaces={2} />
-    <input bind:value={mortgageBase.interestRate} type="range" min="1" max="20" step="0.01" tabindex="-1" />
+    <input bind:value={mortgageBase.interestRate} type="range" min="1" max="50" step="0.01" tabindex="-1" />
 </label>
 
 <label for="number-of-payments-base">

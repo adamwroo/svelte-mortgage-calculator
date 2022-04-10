@@ -10,56 +10,50 @@
 <div class="my-pie-chart-container" style="--amount-percent: {amountProcent}%; --cost-percent: {costProcent}%">
     <div class="my-pie-chart" />
 
-    <div class="legenda">
+    <div class="legend">
         <div class="entry">
             <div class="entry-color entry-amount" />
-            <div class="entry-text">Kapitał</div>
+            <div>Kapitał</div>
         </div>
         <div class="entry">
-            <div  class="entry-color entry-cost" />
-            <div class="entry-text">Odsetki</div>
+            <div class="entry-color entry-cost" />
+            <div>Odsetki</div>
         </div>
     </div>
 </div>
 
 <style>
-    /* todo: get rid of px units; add aspect-ratio and grow: 1 to pie chart */
     .my-pie-chart-container {
         display: flex;
-        align-items: center;
         justify-content: center;
+        gap: 1em;
     }
 
     .my-pie-chart {
+        flex-grow: 1;
+        aspect-ratio: 1;
         background: conic-gradient(
             var(--accent-color) 0% var(--amount-percent),
             var(--background-color-card) var(--amount-percent)
         );
         border-radius: 50%;
-        width: 150px;
-        height: 150px;
-
-        border: 1px solid var(--background-color);
     }
 
-    .legenda {
-        margin-left: 20px;
+    .legend {
         background-color: var(--background-color-card);
-        padding: 5px;
+        padding: 0.375em;
+        align-self: center;
     }
 
     .entry {
         display: flex;
         align-items: center;
+        gap: 0.5em
     }
 
     .entry-color {
-        height: 10px;
-        width: 10px;
-    }
-
-    .entry-text {
-        margin-left: 5px;
+        height: 1em;
+        width: 1em;
     }
 
     .entry-amount {

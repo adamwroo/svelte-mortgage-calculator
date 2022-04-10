@@ -29,14 +29,14 @@
         display: flex;
         flex-wrap: wrap; /* todo: find better solution */
         flex-direction: row;
-        gap: 0.5rem;
+        gap: 0.25em;
         justify-content: center;
         align-items: center;
     }
 
     div.col {
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0;
     }
 
     /* Toggle Switch, see: https://www.w3schools.com/howto/howto_css_switch.asp */

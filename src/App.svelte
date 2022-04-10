@@ -43,6 +43,7 @@
 <style>
 	* {
 		--main-padding: 1em;
+		--sidebar-min-width: 20em;
 	}
 
 	main {
@@ -54,12 +55,12 @@
 	.with-sidebar {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: 1em;
 	}
 
 	.sidebar {
 		flex-grow: 1;
-		min-width: min(100%, 25rem);
+		min-width: min(100%, var(--sidebar-min-width));
 	}
 
 	.sticky {
@@ -72,9 +73,5 @@
 		flex-basis: 0;
 		flex-grow: 999;
 		max-width: 100%;
-	}
-
-	h2 {
-		padding: 0 0.5rem 0.5rem 0.5rem;
 	}
 </style>
