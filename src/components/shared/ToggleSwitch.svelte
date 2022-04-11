@@ -8,12 +8,12 @@
 </script>
 
 <div bind:clientHeight={divElHeight} class:col={divElHeight > 2 * switchElHeight}>
-    <span class:selected={!checked}>{textFalse}</span>
+    <span class:selected={!checked} aria-selected={!checked} on:click={() => {checked = false}}>{textFalse}</span>
     <label bind:clientHeight={switchElHeight} class="switch">
         <input type="checkbox" bind:checked={checked} />
         <span class="slider round" />
     </label>
-    <span class:selected={checked}>{textTrue}</span>
+    <span class:selected={checked} aria-selected={checked} on:click={() => {checked = true}}>{textTrue}</span>
 </div>
 
 <style>
@@ -37,6 +37,10 @@
     div.col {
         flex-direction: column;
         gap: 0;
+    }
+
+    span {
+        cursor: pointer;
     }
 
     /* Toggle Switch, see: https://www.w3schools.com/howto/howto_css_switch.asp */
