@@ -1,19 +1,26 @@
 <script>
+    // todo: consider radio
+    import { onMount } from 'svelte';
+
     export let checked;
     export let textFalse;
     export let textTrue;
 
-    // todo: switching to 'flex-direction: column;' only works one way
-    let divElHeight, switchElHeight;
+    let gap;
+    let divEl, divElWidth, switchElWidth, spanTextFalseElWidth, spanTextTrueElWidth;
+
+    onMount(() => {
+        gap = parseInt(getComputedStyle(divEl).gap);
+    });
 </script>
 
-<div bind:clientHeight={divElHeight} class:col={divElHeight > 2 * switchElHeight}>
-    <span class:selected={!checked} aria-selected={!checked} on:click={() => {checked = false}}>{textFalse}</span>
-    <label bind:clientHeight={switchElHeight} class="switch">
+<div bind:this={divEl} bind:clientWidth={divElWidth} class:col={divElWidth < switchElWidth + spanTextFalseElWidth + spanTextTrueElWidth + 2 * gap}>
+    <span bind:clientWidth={spanTextFalseElWidth} class:selected={!checked} aria-selected={!checked} on:click={() => {checked = false}}>{textFalse}</span>
+    <label bind:clientWidth={switchElWidth} class="switch">
         <input type="checkbox" bind:checked={checked} />
         <span class="slider round" />
     </label>
-    <span class:selected={checked} aria-selected={checked} on:click={() => {checked = true}}>{textTrue}</span>
+    <span bind:clientWidth={spanTextTrueElWidth} class:selected={checked} aria-selected={checked} on:click={() => {checked = true}}>{textTrue}</span>
 </div>
 
 <style>
@@ -27,7 +34,7 @@
 
     div {
         display: flex;
-        flex-wrap: wrap; /* todo: find better solution */
+        flex-wrap: wrap;
         flex-direction: row;
         gap: 0.25em;
         justify-content: center;
