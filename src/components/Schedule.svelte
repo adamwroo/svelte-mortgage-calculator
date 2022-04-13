@@ -1,9 +1,10 @@
 <script>
     import AlternativeInfo from './alternatives/AlternativeInfo.svelte';
     import ScheduleDialog from './schedule/ScheduleDialog.svelte';
+    import InfoGrid from './shared/InfoGrid.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../utils';
     import { selectOnFocus } from '../actions';
-    import { getScheduleData, round } from '../calculations';
+    import { getScheduleData, round } from '../calculations'; // todo: should `round` be removed?
 
     export let mortgage;
     export let overpayments = [];
@@ -12,6 +13,8 @@
 
     let showingDialog = false;
     let scheduleData = [];
+
+    $: overpaymentsSum = overpayments.reduce((sum, overpayment) => sum + overpayment, 0);
 
     const updateScheduleData = (mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment) => {
         let { payments, newOverpayments } = getScheduleData(mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment);
@@ -33,7 +36,7 @@
         showingDialog = false;
     }
 
-    const updateSchedule = overpayment => {
+    const updateScheduleOnSave = overpayment => {
         const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
         let newOverpayments = [...overpayments];
 
@@ -53,31 +56,35 @@
     }
 </script>
 
-<p>
-    Całkowita kwota nadpłaty: { toPLN(overpayments.reduce((sum, overpayment) => sum + overpayment, 0)) }
-</p>
-<p>
-    Liczba rat: {scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})
-    <br />
-    <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
-    <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
-</p>
-<p>
-    Koszt odsetek: { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
-    <!-- todo: sum shouldn't take place here (in calculations? object?) -->
-    <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
-</p>
-<div>
-    <label>
-        <input type="checkbox" bind:checked={decreaseInstallmentAfterOverpayment} />
-        Zmniejsz wysokość raty po nadpłacie
-    </label>
-</div>
-<div>
-    <label>
-        <input type="checkbox" bind:checked={highlightRowWithOverpay} />
-        Zaznacz miesiące z nadpłatą
-    </label>
+<div class="schedule-info">
+    <InfoGrid>
+        <span>Całkowita nadpłata:</span><span>{ toPLN(overpaymentsSum) }</span>
+        <span>Liczba rat:</span><span>{scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})</span>
+        <span></span>
+        <span>
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
+        </span>
+        <span>Koszt odsetek:</span>
+        <span>
+            <!-- todo: sum shouldn't take place here (in calculations? object?) -->
+            { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
+            <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
+        </span>
+    </InfoGrid>
+
+    <div>
+        <label>
+            <input type="checkbox" bind:checked={decreaseInstallmentAfterOverpayment} />
+            Zmniejsz wysokość raty po nadpłacie
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" bind:checked={highlightRowWithOverpay} />
+            Zaznacz miesiące z nadpłatą
+        </label>
+    </div>
 </div>
 
 <button class="primary" on:click={() => openDialog()}>Dodaj</button>
@@ -87,7 +94,7 @@
     <ScheduleDialog
         mortgageAmount={mortgage.amount}
         on:cancel={closeDialog}
-        on:save={e => updateSchedule(e.detail)}
+        on:save={e => updateScheduleOnSave(e.detail)}
     />
 {/if}
 
@@ -125,6 +132,11 @@
 </div>
 
 <style>
+    .schedule-info {
+        display: flex;
+        flex-direction: column;
+    }
+
     .table-container {
         display: flex;
         /* 'center' breaks scrolling (some items not visible); 'safe center' not yet fully supported */

@@ -52,6 +52,7 @@ const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => 
     return amount / sigma;
 }
 
+// todo: combine with getMonthlySchedule
 const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return []; // todo: test if [] returned
 
