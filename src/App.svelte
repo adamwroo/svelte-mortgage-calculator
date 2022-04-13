@@ -17,14 +17,14 @@
 	$: mortgage = getMortgage($mortgageBase);
 </script>
 
-<main class="with-sidebar">
-	<div class="sidebar">
+<main>
+	<div class="not-sidebar">
 		<div class="sticky">
 			<MortgageBase bind:mortgageBase={$mortgageBase} />
 			<MortgageCost {mortgage} />
 		</div>
 	</div>
-	<div class="not-sidebar">
+	<div class="sidebar">
 		<h2>
 			<ToggleSwitch bind:checked={$showSchedule} textFalse="Alternatywy" textTrue="Harmonogram" />
 		</h2>
@@ -43,35 +43,30 @@
 <style>
 	* {
 		--main-padding: 1em;
-		--sidebar-min-width: 20em;
+		--sidebar-max-width: 20em;
 	}
 
 	main {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em;
+		justify-content: center;
 		text-align: center;
 		padding: var(--main-padding);
 		margin: 0 auto;
 	}
 
-	.with-sidebar {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1em;
-	}
-
-	.sidebar {
-		flex-grow: 1;
-		min-width: min(100%, var(--sidebar-min-width));
+	.not-sidebar {
+		padding-inline: 3em;
 	}
 
 	.sticky {
-		position: -webkit-sticky;
 		position: sticky;
 		top: var(--main-padding);
 	}
 
-	.not-sidebar {
-		flex-basis: 0;
-		flex-grow: 999;
+	.sidebar {
+		flex-grow: 1;
 		max-width: 100%;
 	}
 </style>

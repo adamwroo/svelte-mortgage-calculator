@@ -1,15 +1,15 @@
 <script>
     export let mortgage;
 
+    let containerElWidth;
+
     $: mortgageAmount = mortgage.amount;
     $: interestCost = mortgage.getInterestCost();
     $: amountProcent = mortgageAmount * 100 / (mortgageAmount + interestCost);
-    $: costProcent = interestCost * 100 / (mortgageAmount + interestCost);
 </script>
 
-<div class="my-pie-chart-container" style="--amount-percent: {amountProcent}%; --cost-percent: {costProcent}%">
+<div bind:clientWidth={containerElWidth} class="my-pie-chart-container" style="--amount-percent: {amountProcent}%; --container-width: {containerElWidth}px">
     <div class="my-pie-chart" />
-
     <div class="legend">
         <div class="entry">
             <div class="entry-color entry-amount" />
@@ -25,8 +25,7 @@
 <style>
     .my-pie-chart-container {
         display: flex;
-        justify-content: center;
-        gap: 1em;
+        gap: min(1em, calc(var(--container-width) / 20));
     }
 
     .my-pie-chart {
@@ -43,6 +42,7 @@
         background-color: var(--background-color-card);
         padding: 0.375em;
         align-self: center;
+        font-size: min(1em, calc(var(--container-width) / 20));
     }
 
     .entry {
