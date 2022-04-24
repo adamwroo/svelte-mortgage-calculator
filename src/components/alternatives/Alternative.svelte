@@ -2,6 +2,7 @@
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
     import AlternativeInfo from './AlternativeInfo.svelte';
+    import InfoGrid from '../shared/InfoGrid.svelte';
     import { toYearsAndMonthsHint, toPLN } from '../../utils';
     import { recalculate } from '../../calculations';
 
@@ -29,30 +30,43 @@
 {#if newMortgage == null}
     <p class="warning">Niewłaściwe dane</p>
 {:else}
-    <p>
-        Kwota: {toPLN(newMortgage.amount)}
-        <AlternativeInfo oldValue={mortgage.amount} newValue={newMortgage.amount} type="currency" />
-    </p>
-    <p>
-        Oprocentowanie: {newMortgage.interestRate.toFixed(2)}%
-        <AlternativeInfo oldValue={mortgage.interestRate} newValue={newMortgage.interestRate} type="percent" />
-    </p>
-    <p>
-        Liczba rat: {newMortgage.numberOfPayments} ({toYearsAndMonthsHint(newMortgage.numberOfPayments)})
-        <br />
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} />
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} type="years-and-months" />
-    </p>
-    <p>
-        Miesięczna rata: { toPLN(newMortgage.monthlyInstallment) }
-        {#if alternative.adjustType === 'adjust-installment' || mortgage.interestRate != newMortgage.interestRate}
-            <AlternativeInfo oldValue={mortgage.monthlyInstallment} newValue={newMortgage.monthlyInstallment} type="currency" />
-        {/if}
-    </p>
-    <p>
-        Koszt odsetek: { toPLN(newMortgage.getInterestCost()) }
-        <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={newMortgage.getInterestCost()} type="currency" />
-    </p>
+    <InfoGrid>
+        <span>Kwota:</span>
+        <span>
+            {toPLN(newMortgage.amount)}
+            <AlternativeInfo oldValue={mortgage.amount} newValue={newMortgage.amount} type="currency" />
+        </span>
+
+        <span>Oprocentowanie:</span>
+        <span>
+            {newMortgage.interestRate.toFixed(2)}%
+            <AlternativeInfo oldValue={mortgage.interestRate} newValue={newMortgage.interestRate} type="percent" />
+        </span>
+
+        <span>Liczba rat:</span>
+        <span>
+            {newMortgage.numberOfPayments} ({toYearsAndMonthsHint(newMortgage.numberOfPayments)})
+        </span>
+        <span></span>
+        <span>
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} />
+            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={newMortgage.numberOfPayments} type="years-and-months" />
+        </span>
+
+        <span>Miesięczna rata:</span>
+        <span>
+            { toPLN(newMortgage.monthlyInstallment) }
+            {#if alternative.adjustType === 'adjust-installment' || mortgage.interestRate != newMortgage.interestRate}
+                <AlternativeInfo oldValue={mortgage.monthlyInstallment} newValue={newMortgage.monthlyInstallment} type="currency" />
+            {/if}
+        </span>
+
+        <span>Koszt odsetek:</span>
+        <span>
+            { toPLN(newMortgage.getInterestCost()) }
+            <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={newMortgage.getInterestCost()} type="currency" />
+        </span>
+    </InfoGrid>
 {/if}
 
 

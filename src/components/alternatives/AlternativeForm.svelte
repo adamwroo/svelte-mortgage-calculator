@@ -57,7 +57,7 @@
     </div>
 
     <label for="interest-rate-change-form">
-        Zmiana oprocentowania (+/-)
+        Zmiana oprocentowania (+/- pp.)
         <br />
         <input bind:value={alternative.interestRateChange} use:selectOnFocus type="number" id="interest-rate-change-form" min={-mortgage.interestRate} max="100" step="0.01" autocomplete="off" />
         <br />
