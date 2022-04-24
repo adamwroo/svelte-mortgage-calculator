@@ -1,7 +1,6 @@
 <script>
-    import AlternativeInfo from './alternatives/AlternativeInfo.svelte';
+    import OverpaymentInfo from './schedule/OverpaymentInfo.svelte';
     import ScheduleDialog from './schedule/ScheduleDialog.svelte';
-    import InfoGrid from './shared/InfoGrid.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../utils';
     import { selectOnFocus } from '../actions';
     import { getScheduleData, round } from '../calculations'; // todo: should `round` be removed?
@@ -13,8 +12,6 @@
 
     let showingDialog = false;
     let scheduleData = [];
-
-    $: overpaymentsSum = overpayments.reduce((sum, overpayment) => sum + overpayment, 0);
 
     const updateScheduleData = (mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment) => {
         let { payments, newOverpayments } = getScheduleData(mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment);
@@ -57,21 +54,7 @@
 </script>
 
 <div class="schedule-container">
-<InfoGrid>
-    <span>Całkowita nadpłata:</span><span>{ toPLN(overpaymentsSum) }</span>
-    <span>Liczba rat:</span><span>{scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})</span>
-    <span></span>
-    <span>
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
-        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
-    </span>
-    <span>Koszt odsetek:</span>
-    <span>
-        <!-- todo: sum shouldn't take place here (in calculations? object?) -->
-        { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
-        <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
-    </span>
-</InfoGrid>
+    <OverpaymentInfo {mortgage} {scheduleData} {overpayments} />
 
 <div class="overpayment-form">
     <div>
