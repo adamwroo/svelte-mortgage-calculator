@@ -52,11 +52,12 @@
 		gap: 1em;
 		text-align: center;
 		padding: var(--main-padding);
+		justify-content: center;
 	}
 
 	/* parent for .sticky */
 	.not-sidebar {
-		flex-grow: 1;
+		padding-inline: 2em;
 	}
 
 	.sticky {
@@ -69,6 +70,6 @@
 
 	.sidebar {
 		max-width: 100%;
-		flex-grow: 4;
+		flex-grow: 1;
 	}
 </style>
