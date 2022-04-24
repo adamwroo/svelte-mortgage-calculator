@@ -50,23 +50,25 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1em;
-		justify-content: center;
 		text-align: center;
 		padding: var(--main-padding);
-		margin: 0 auto;
 	}
 
+	/* parent for .sticky */
 	.not-sidebar {
-		padding-inline: 3em;
+		flex-grow: 1;
 	}
 
 	.sticky {
 		position: sticky;
 		top: var(--main-padding);
+		align-items: center;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.sidebar {
-		flex-grow: 1;
 		max-width: 100%;
+		flex-grow: 4;
 	}
 </style>

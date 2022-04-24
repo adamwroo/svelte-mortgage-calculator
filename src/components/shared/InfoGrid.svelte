@@ -6,7 +6,7 @@
     .info-grid {
         display: grid;
         grid-template-columns: repeat(2, auto);
-        column-gap: 1em;
+        column-gap: 0.5em;
     }
 
     :global(.info-grid > *:nth-child(odd)) {

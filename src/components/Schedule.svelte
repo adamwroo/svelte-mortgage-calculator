@@ -56,23 +56,24 @@
     }
 </script>
 
-<div class="schedule-info">
-    <InfoGrid>
-        <span>Całkowita nadpłata:</span><span>{ toPLN(overpaymentsSum) }</span>
-        <span>Liczba rat:</span><span>{scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})</span>
-        <span></span>
-        <span>
-            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
-            <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
-        </span>
-        <span>Koszt odsetek:</span>
-        <span>
-            <!-- todo: sum shouldn't take place here (in calculations? object?) -->
-            { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
-            <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
-        </span>
-    </InfoGrid>
+<div class="schedule-container">
+<InfoGrid>
+    <span>Całkowita nadpłata:</span><span>{ toPLN(overpaymentsSum) }</span>
+    <span>Liczba rat:</span><span>{scheduleData.length} ({toYearsAndMonthsHint(scheduleData.length)})</span>
+    <span></span>
+    <span>
+        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} />
+        <AlternativeInfo oldValue={mortgage.numberOfPayments} newValue={scheduleData.length} type="years-and-months" />
+    </span>
+    <span>Koszt odsetek:</span>
+    <span>
+        <!-- todo: sum shouldn't take place here (in calculations? object?) -->
+        { toPLN(scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)) }
+        <AlternativeInfo oldValue={mortgage.getInterestCost()} newValue={scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0)} type="currency" />
+    </span>
+</InfoGrid>
 
+<div class="overpayment-form">
     <div>
         <label>
             <input type="checkbox" bind:checked={decreaseInstallmentAfterOverpayment} />
@@ -85,10 +86,11 @@
             Zaznacz miesiące z nadpłatą
         </label>
     </div>
+    <div class="buttons">
+        <button class="primary" on:click={() => openDialog()}>Dodaj nadpłatę</button>
+        <button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
+    </div>
 </div>
-
-<button class="primary" on:click={() => openDialog()}>Dodaj</button>
-<button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
 
 {#if showingDialog}
     <ScheduleDialog
@@ -131,10 +133,27 @@
     </table>
 </div>
 
+</div>
+
 <style>
-    .schedule-info {
+    .schedule-container {
+        --base-gap: 0.25em;
         display: flex;
         flex-direction: column;
+        gap: var(--base-gap);
+        padding-top: var(--base-gap);
+    }
+
+    .overpayment-form {
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        align-self: flex-end;
+        padding-top: calc(var(--base-gap) / 2);
     }
 
     .table-container {
