@@ -1,9 +1,9 @@
 <script>
     import OverpaymentInfo from './schedule/OverpaymentInfo.svelte';
     import ScheduleDialog from './schedule/ScheduleDialog.svelte';
+    import InputNumberSafeMax from './shared/InputNumberSafeMax.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../utils';
-    import { selectOnFocus } from '../actions';
-    import { getScheduleData, round } from '../calculations'; // todo: should `round` be removed?
+    import { getScheduleData } from '../calculations';
 
     export let mortgage;
     export let overpayments = [];
@@ -13,8 +13,8 @@
     let showingDialog = false;
     let scheduleData = [];
 
-    const updateScheduleData = (mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment) => {
-        let { payments, newOverpayments } = getScheduleData(mortgage, oldOverpaymentsTest, decreaseInstallmentAfterOverpayment);
+    const updateScheduleData = (mortgage, oldOverpayments, decreaseInstallmentAfterOverpayment) => {
+        let { payments, newOverpayments } = getScheduleData(mortgage, oldOverpayments, decreaseInstallmentAfterOverpayment);
         overpayments = newOverpayments;
         scheduleData = payments;
     }
@@ -97,12 +97,10 @@
             <tr class:with-overpayment={highlightRowWithOverpay && overpayments[payment.month - 1] > 0}>
                 <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
                 <td>
-                    <input
+                    <InputNumberSafeMax
                         bind:value={overpayments[payment.month - 1]}
-                        use:selectOnFocus
-                        type="number" min="0"
+                        min="0"
                         max={payment.month == 1 ? mortgage.amount : scheduleData[payment.month - 2].capitalToRepay}
-                        autocomplete="off"
                     />
                 </td>
                 <td>{toPLN(payment.capitalInstallment)}</td>
@@ -167,7 +165,7 @@
         background-color: var(--background-color-table);
     }
 
-    td > input {
+    :global(.table-container td > input) {
         width: 10ch;
         margin: 0;
     }
