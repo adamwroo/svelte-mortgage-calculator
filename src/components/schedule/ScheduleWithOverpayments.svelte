@@ -1,0 +1,153 @@
+<script>
+    import InputNumberSafeMax from '../shared/InputNumberSafeMax.svelte';
+    import ScheduleDialog from './ScheduleDialog.svelte';
+    import { toPLN, toYearsAndMonthsHint } from '../../utils';
+
+    export let scheduleData;
+    export let overpayments;
+    export let mortgageAmount;
+    export let decreaseInstallmentAfterOverpayment;
+    export let highlightRowWithOverpay;
+
+    let showingDialog = false;
+
+    const clearOverpayments = () => {
+        overpayments = new Array(overpayments.length).fill(0);
+    }
+
+    const openDialog = () => {
+        showingDialog = true;
+    }
+
+    const closeDialog = () => {
+        showingDialog = false;
+    }
+
+    const updateScheduleOnSave = overpayment => {
+        const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
+        let newOverpayments = [...overpayments];
+
+        for (let i = 0; i < newOverpayments.length; i++) {
+            const month = i + 1;
+            if (month % overpaymentFrequency == 0) {
+                if (overwrite) {
+                    newOverpayments[i] = overpaymentAmount;
+                } else {
+                    newOverpayments[i] += overpaymentAmount;
+                }
+            }
+        }
+
+        overpayments = newOverpayments;
+        closeDialog()
+    }
+</script>
+
+<div class="overpayment-form">
+    <div>
+        <label>
+            <input type="checkbox" bind:checked={decreaseInstallmentAfterOverpayment} />
+            Zmniejsz wysokość raty po nadpłacie
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" bind:checked={highlightRowWithOverpay} />
+            Zaznacz miesiące z nadpłatą
+        </label>
+    </div>
+    <div class="buttons">
+        <button class="primary" on:click={() => openDialog()}>Dodaj nadpłatę</button>
+        <button class="secondary" on:click={() => clearOverpayments()}>Usuń nadpłaty</button>
+    </div>
+</div>
+
+{#if showingDialog}
+    <ScheduleDialog
+        {mortgageAmount}
+        on:cancel={closeDialog}
+        on:save={e => updateScheduleOnSave(e.detail)}
+    />
+{/if}
+
+<div class="table-container">
+    <table>
+        <tr>
+            <th>LP</th>
+            <th>Nadpłaty</th>
+            <th>Raty kapitałowe</th>
+            <th>Raty odsetkowe</th>
+            <th>Razem</th>
+            <th>Pozostały kapitał</th>
+        </tr>
+        {#each scheduleData as payment (payment.month)}
+            <tr class:with-overpayment={highlightRowWithOverpay && overpayments[payment.month - 1] > 0}>
+                <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
+                <td>
+                    <InputNumberSafeMax
+                        bind:value={overpayments[payment.month - 1]}
+                        min="0"
+                        max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
+                    />
+                </td>
+                <td>{toPLN(payment.capitalInstallment)}</td>
+                <td>{toPLN(payment.interestInstallment)}</td>
+                <td>
+                    {toPLN(payment.interestInstallment + payment.capitalInstallment)}
+                </td>
+                <td>{toPLN(payment.capitalToRepay)}</td>
+            </tr>
+        {/each}
+    </table>
+</div>
+
+<style>
+    .overpayment-form {
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        align-self: flex-end;
+        padding-top: calc(var(--base-gap) / 2);
+    }
+
+    .table-container {
+        display: flex;
+        /* 'center' breaks scrolling (some items not visible); 'safe center' not yet fully supported */
+        /* justify-content: safe center; */
+        overflow-x: auto;
+    }
+    
+    table {
+        border-collapse: collapse;
+        /* workaround because 'justify-content: safe center' not yet fully supported */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    tr.with-overpayment td {
+        color: var(--accent-color);
+    }
+
+    td, th {
+        border: 1px solid var(--background-color-table);
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--background-color-table);
+    }
+
+    :global(.table-container td > input) {
+        width: 10ch;
+        margin: 0;
+    }
+
+    .hint {
+        cursor: help;
+    }
+</style>

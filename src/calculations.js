@@ -27,8 +27,8 @@ export const recalculate = (mortgage, alternative) => {
     }
 }
 
-export const getScheduleData = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
-    return getMonthlySchedule(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment);
+export const getScheduleDataWithOverpayments = (mortgage, overpayments, decreaseInstallmentAfterOverpayment) => {
+    return getMonthlyPaymentsWithOverpayments(mortgage.amount, mortgage.interestRate, mortgage.numberOfPayments, mortgage.monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment);
 }
 
 // todo: shoudn't be exported, should be used only internally
@@ -52,7 +52,7 @@ const calculateMonthlyInstallment = (amount, interestRate, numberOfPayments) => 
     return amount / sigma;
 }
 
-// todo: combine with getMonthlySchedule
+// todo: combine with getMonthlySchedule?
 const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInstallment) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return []; // todo: test if [] returned
 
@@ -71,20 +71,18 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
     return payments;
 }
 
-const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInstallment, overpayments, decreaseInstallmentAfterOverpayment) => {
+const getMonthlyPaymentsWithOverpayments = (amount, interestRate, numberOfPayments, monthlyInstallment, overpaymentsInfo) => {
     if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
 
     let payments = [];
     let capitalToRepay = amount;
-    let newOverpayments = [];
+
+    let overpayments = overpaymentsInfo?.overpayments;
+    let decreaseInstallmentAfterOverpayment = overpaymentsInfo?.decreaseInstallmentAfterOverpayment;
 
     for (let i = 1; i <= numberOfPayments; i++) {
         // overpayment happens first
         let overpayment = overpayments?.[i - 1] ?? 0;
-        overpayment = Math.max(overpayment, 0);
-        // overpayment can't be larger than capital left to repay
-        overpayment = Math.min(overpayment, capitalToRepay);
-        newOverpayments.push(overpayment);
 
         // decrease capital by overpayment (this happens BEFORE installment is paid)
         capitalToRepay = capitalToRepay - overpayment;
@@ -106,7 +104,7 @@ const getMonthlySchedule = (amount, interestRate, numberOfPayments, monthlyInsta
         if (capitalToRepay == 0) break;
     }
 
-    return { payments, newOverpayments };
+    return payments;
 }
 
 /**

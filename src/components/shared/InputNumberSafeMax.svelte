@@ -12,6 +12,11 @@
 
     $: displayValue = round(value);
     $: safeMax = round(max);
+    $: updateAfterMaxChange(max);
+
+    const updateAfterMaxChange = () => {
+        handleChange();
+    }
 
     const handleChange = () => {
         if (displayValue < min) {
