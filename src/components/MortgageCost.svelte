@@ -21,5 +21,6 @@
     .cost {
         display: flex;
         flex-direction: column;
+        min-width: 26ch; /* to make place for text with cost over 1M to avoid 'jumping' */
     }
 </style>
