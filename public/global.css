@@ -6,20 +6,24 @@ html, body {
 	color-scheme: light dark;
 }
 
-body:not(.dark-mode) {
-	--accent-color: hsl(0deg, 69%, 42%);
-	--text-color: hsl(222deg, 22%, 5%);
-	--not-selected-text-color: #bbb;
-	--background-color-base: 225deg, 25%, 95%;
-	--background-color-card-base: 0deg, 0%, 100%;
+@media (prefers-color-scheme: light) {
+	:root {
+		--accent-color: hsl(0deg, 69%, 42%);
+		--text-color: hsl(222deg, 22%, 5%);
+		--not-selected-text-color: #bbb;
+		--background-color-base: 225deg, 25%, 95%;
+		--background-color-card-base: 0deg, 0%, 100%;
+	}
 }
 
-body.dark-mode {
-	--accent-color: hsl(0deg, 69%, 42%);
-	--text-color: hsl(0deg, 0%, 100%);
-	--not-selected-text-color: #555;
-	--background-color-base: 210deg, 30%, 8%;
-	--background-color-card-base: 210deg, 22%, 15%;
+@media (prefers-color-scheme: dark) {
+	:root {
+		--accent-color: hsl(0deg, 69%, 42%);
+		--text-color: hsl(0deg, 0%, 100%);
+		--not-selected-text-color: #555;
+		--background-color-base: 210deg, 30%, 8%;
+		--background-color-card-base: 210deg, 22%, 15%;
+	}
 }
 
 body {

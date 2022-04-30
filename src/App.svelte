@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import { mortgageBase, alternatives, showSchedule, overpayments, decreaseInstallmentAfterOverpayment, highlightRowWithOverpay } from './stores';
 	import { getMortgage } from './calculations';
 	import MortgageBase from './components/MortgageBase.svelte';
@@ -8,11 +7,11 @@
 	import Schedule from './components/Schedule.svelte';
 	import ToggleSwitch from './components/shared/ToggleSwitch.svelte';
 
-	onMount(() => {
-		// todo: extract to a component
-		if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-			window.document.body.classList.toggle('dark-mode');
-	})
+	// // todo: extract to a component
+	// onMount(() => {
+	// 	if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+	// 		window.document.body.classList.toggle('dark-mode');
+	// })
 
 	$: mortgage = getMortgage($mortgageBase);
 </script>
