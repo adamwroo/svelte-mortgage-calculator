@@ -25,7 +25,7 @@
 	</div>
 	<div class="sidebar">
 		<h2>
-			<ToggleSwitch bind:checked={$showSchedule} textFalse="Alternatywy" textTrue="Harmonogram" />
+			<ToggleSwitch bind:checked={$showSchedule} textFalse="Alternatywy" textTrue="Harmonogram" ariaLabel="Pokaż alternatywy lub harmonogram" />
 		</h2>
 		{#if $showSchedule}
 			<Schedule {mortgage}

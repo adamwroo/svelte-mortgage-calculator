@@ -9,6 +9,7 @@
     export let value;
     export let min;
     export let max;
+    export let ariaLabel = '';
 
     $: displayValue = round(value);
     $: safeMax = round(max);
@@ -40,4 +41,5 @@
     on:change={handleChange}
     use:selectOnFocus
     autocomplete="off"
+    aria-label={ariaLabel}
 >

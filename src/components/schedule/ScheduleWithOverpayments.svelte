@@ -88,6 +88,7 @@
                         bind:value={overpayments[payment.month - 1]}
                         min="0"
                         max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
+                        ariaLabel="nadpłata miesiąc {payment.month}"
                     />
                 </td>
                 <td>{toPLN(payment.capitalInstallment)}</td>

@@ -26,10 +26,10 @@
 
 <style>
     .better {
-        color: green;
+        color: var(--text-color-better);
     }
 
     .worse {
-        color: red;
+        color: var(--text-color-worse);
     }
 </style>

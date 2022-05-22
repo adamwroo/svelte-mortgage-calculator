@@ -12,6 +12,8 @@ html, body {
 		--not-selected-text-color: #bbb;
 		--background-color-base: 225deg, 25%, 95%;
 		--background-color-card-base: 0deg, 0%, 100%;
+		--text-color-better: #006400;
+		--text-color-worse: #b30202;
 	}
 }
 
@@ -22,6 +24,8 @@ html, body {
 		--not-selected-text-color: #555;
 		--background-color-base: 210deg, 30%, 8%;
 		--background-color-card-base: 210deg, 22%, 15%;
+		--text-color-better: #62d762;
+		--text-color-worse: #f15555;
 		color-scheme: light dark;
 	}
 }

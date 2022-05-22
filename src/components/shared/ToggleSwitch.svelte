@@ -5,6 +5,7 @@
     export let checked;
     export let textFalse;
     export let textTrue;
+    export let ariaLabel='';
 
     let gap;
     let divEl, divElWidth, switchElWidth, spanTextFalseElWidth, spanTextTrueElWidth;
@@ -17,7 +18,7 @@
 <div bind:this={divEl} bind:clientWidth={divElWidth} class:col={divElWidth < switchElWidth + spanTextFalseElWidth + spanTextTrueElWidth + 2 * gap}>
     <span bind:clientWidth={spanTextFalseElWidth} class:selected={!checked} aria-selected={!checked} on:click={() => {checked = false}}>{textFalse}</span>
     <label bind:clientWidth={switchElWidth} class="switch">
-        <input type="checkbox" bind:checked={checked} />
+        <input type="checkbox" bind:checked={checked} aria-label={ariaLabel} />
         <span class="slider round" />
     </label>
     <span bind:clientWidth={spanTextTrueElWidth} class:selected={checked} aria-selected={checked} on:click={() => {checked = true}}>{textTrue}</span>
