@@ -11,7 +11,7 @@
     export let max;
     export let ariaLabel = '';
 
-    $: displayValue = round(value);
+    $: displayValue = round(value ?? 0);
     $: safeMax = round(max);
     $: updateAfterMaxChange(max);
 
