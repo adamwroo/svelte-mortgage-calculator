@@ -50,7 +50,8 @@
             {/if}
         </td>
         <td>
-            {#if fullView}{toPLN(payment.capitalToRepay)}
+            {#if fullView}
+                {toPLN(payment.capitalToRepay)}
             {:else}
                 -
             {/if}
