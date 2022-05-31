@@ -1,7 +1,6 @@
 <script>
-    import InputNumberSafeMax from '../shared/InputNumberSafeMax.svelte';
+    import ScheduleDataRow from './ScheduleDataRow.svelte';
     import ScheduleDialog from './ScheduleDialog.svelte';
-    import { toPLN, toYearsAndMonthsHint } from '../../utils';
 
     export let scheduleData;
     export let overpayments;
@@ -10,6 +9,9 @@
     export let highlightRowWithOverpay;
 
     let showingDialog = false;
+    let intersectings = new Array(scheduleData.length).fill(true);
+
+    $: getMaxIntersectingMonth = () => intersectings.lastIndexOf(true) + 1;
 
     const clearOverpayments = () => {
         overpayments = new Array(overpayments.length).fill(0);
@@ -81,23 +83,14 @@
             <th>Pozostały kapitał</th>
         </tr>
         {#each scheduleData as payment (payment.month)}
-            <tr class:with-overpayment={highlightRowWithOverpay && overpayments[payment.month - 1] > 0}>
-                <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
-                <td>
-                    <InputNumberSafeMax
-                        bind:value={overpayments[payment.month - 1]}
-                        min="0"
-                        max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
-                        ariaLabel="nadpłata miesiąc {payment.month}"
-                    />
-                </td>
-                <td>{toPLN(payment.capitalInstallment)}</td>
-                <td>{toPLN(payment.interestInstallment)}</td>
-                <td>
-                    {toPLN(payment.interestInstallment + payment.capitalInstallment)}
-                </td>
-                <td>{toPLN(payment.capitalToRepay)}</td>
-            </tr>
+            <ScheduleDataRow
+                { highlightRowWithOverpay }
+                bind:overpayment={overpayments[payment.month - 1]}
+                { payment }
+                max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
+                bind:intersecting={intersectings[payment.month - 1]}
+                fullView={payment.month == 1 || payment.month <= getMaxIntersectingMonth()}
+            />
         {/each}
     </table>
 </div>
@@ -129,17 +122,17 @@
         margin-right: auto;
     }
 
-    tr.with-overpayment td {
+    :global(tr.with-overpayment td) {
         color: var(--accent-color);
     }
 
-    td, th {
+    :global(td, th) {
         border: 1px solid var(--background-color-table);
         text-align: left;
         padding: 8px;
     }
 
-    tr:nth-child(even) {
+    :global(tr:nth-child(even)) {
         background-color: var(--background-color-table);
     }
 
@@ -148,7 +141,7 @@
         margin: 0;
     }
 
-    .hint {
+    :global(.hint) {
         cursor: help;
     }
 </style>
