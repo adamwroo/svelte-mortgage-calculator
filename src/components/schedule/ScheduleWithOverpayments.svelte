@@ -9,9 +9,6 @@
     export let highlightRowWithOverpay;
 
     let showingDialog = false;
-    let intersectings = new Array(scheduleData.length).fill(true);
-
-    $: getMaxIntersectingMonth = () => intersectings.lastIndexOf(true) + 1;
 
     const clearOverpayments = () => {
         overpayments = new Array(overpayments.length).fill(0);
@@ -94,8 +91,6 @@
                 bind:overpayment={overpayments[payment.month - 1]}
                 { payment }
                 maxOverpayment={getMaxOverpayment(payment.month)}
-                bind:intersecting={intersectings[payment.month - 1]}
-                fullView={payment.month == 1 || payment.month <= getMaxIntersectingMonth()}
             />
         {/each}
     </table>

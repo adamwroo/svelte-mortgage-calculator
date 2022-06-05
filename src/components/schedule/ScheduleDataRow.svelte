@@ -7,17 +7,15 @@
     export let overpayment;
     export let payment;
     export let maxOverpayment;
-    export let intersecting;
-    export let fullView;
 
     let element;
 </script>
 
-<IntersectionObserver {element} bind:intersecting>
+<IntersectionObserver {element} let:intersecting>
     <tr bind:this={element} class:with-overpayment={highlightRowWithOverpay && overpayment > 0}>
         <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
         <td>
-            {#if fullView}
+            {#if intersecting}
                 <InputNumber
                     bind:value={overpayment}
                     min={0}
@@ -31,28 +29,28 @@
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting}
                 {toPLN(payment.capitalInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting}
                 {toPLN(payment.interestInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting}
                 {toPLN(payment.interestInstallment + payment.capitalInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting}
                 {toPLN(payment.capitalToRepay)}
             {:else}
                 -
