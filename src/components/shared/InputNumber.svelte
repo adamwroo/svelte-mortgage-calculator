@@ -46,12 +46,12 @@
             internalValue = max;
         }
 
+        if (Number.isInteger(step)) {
+            internalValue = internalValue - (internalValue % step); 
+        }
+
         // clean up formatting
         inputEl.value = internalValue.toString();
-
-        if (value === internalValue) {
-            return; // skip to avoid unnecessary assignments
-        }
 
         value = internalValue;
     }

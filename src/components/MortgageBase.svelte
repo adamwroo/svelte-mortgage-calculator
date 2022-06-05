@@ -9,8 +9,8 @@
 
 <label for="amount-base">
     <span>Kwota</span>
-    <InputNumber bind:value={mortgageBase.amount} id="amount-base" min={1000} max={1000000} step={100} decimalPlaces={2} />
-    <input bind:value={mortgageBase.amount} type="range" min="1000" max="1000000" tabindex="-1" />
+    <InputNumber bind:value={mortgageBase.amount} id="amount-base" min={1000} max={1000000} step={100} decimalPlaces={0} />
+    <input bind:value={mortgageBase.amount} type="range" min="1000" max="1000000" step="100" tabindex="-1" />
 </label>
 
 <label for="interest-rate-base">
