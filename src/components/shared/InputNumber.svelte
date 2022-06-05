@@ -35,6 +35,9 @@
             }
         }
 
+        // check if multiple of `step`
+        if (Number.isInteger(step) && internalValue % step != 0) return; // allow but don't update value (allows user to continue typing and fixes, if necessary, in on:change)
+
         value = internalValue;
     }
 
