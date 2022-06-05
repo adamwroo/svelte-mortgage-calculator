@@ -1,24 +1,33 @@
 <script>
     import OverpaymentInfo from './schedule/OverpaymentInfo.svelte';
     import ScheduleWithOverpayments from './schedule/ScheduleWithOverpayments.svelte';
-    import { getScheduleDataWithOverpayments } from '../calculations';
+    import { getScheduleData } from '../calculations';
 
     export let mortgage;
     export let overpayments = [];
     export let decreaseInstallmentAfterOverpayment;
     export let highlightRowWithOverpay;
 
-    $: scheduleData = getScheduleDataWithOverpayments(mortgage, { overpayments, decreaseInstallmentAfterOverpayment });
+    let scheduleData = [];
+    $: {
+        scheduleData = getScheduleData(mortgage, { overpayments, decreaseInstallmentAfterOverpayment });
+        // clear remaining overpayments
+        if (overpayments.length > scheduleData.length) {
+            for (let i = scheduleData.length; i < overpayments.length; i++) {
+                overpayments[i] = 0;
+            }
+        }
+    }
 </script>
 
 <div class="schedule-container">
-    <OverpaymentInfo {mortgage} {scheduleData} {overpayments} />
+    <OverpaymentInfo {mortgage} {scheduleData} />
     <ScheduleWithOverpayments
         {scheduleData}
         bind:overpayments={overpayments}
         mortgageAmount={mortgage.amount}
         bind:decreaseInstallmentAfterOverpayment={decreaseInstallmentAfterOverpayment}
-        {highlightRowWithOverpay}
+        bind:highlightRowWithOverpay={highlightRowWithOverpay}
     />
 </div>
 

@@ -43,6 +43,12 @@
         overpayments = newOverpayments;
         closeDialog()
     }
+
+    const getMaxOverpayment = (month) => {
+        if(month == 1) return mortgageAmount;
+
+        return Math.ceil(scheduleData[month - 2].capitalToRepay / 100) * 100;
+    }
 </script>
 
 <div class="overpayment-form">
@@ -87,7 +93,7 @@
                 { highlightRowWithOverpay }
                 bind:overpayment={overpayments[payment.month - 1]}
                 { payment }
-                max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
+                maxOverpayment={getMaxOverpayment(payment.month)}
                 bind:intersecting={intersectings[payment.month - 1]}
                 fullView={payment.month == 1 || payment.month <= getMaxIntersectingMonth()}
             />

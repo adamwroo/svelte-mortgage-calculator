@@ -1,12 +1,12 @@
 <script>
     import IntersectionObserver from "svelte-intersection-observer";
-    import InputNumberSafeMax from '../shared/InputNumberSafeMax.svelte';
+    import InputNumber from '../shared/InputNumber.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../../utils';
 
     export let highlightRowWithOverpay;
     export let overpayment;
     export let payment;
-    export let max;
+    export let maxOverpayment;
     export let intersecting;
     export let fullView;
 
@@ -18,12 +18,14 @@
         <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
         <td>
             {#if fullView}
-                <InputNumberSafeMax
-                bind:value={ overpayment }
-                min="0"
-                max={ max}
-                ariaLabel="nadpłata miesiąc {payment.month}"
-                />
+                <InputNumber
+                    bind:value={overpayment}
+                    min={0}
+                    max={maxOverpayment}
+                    step={100}
+                    decimalPlaces={0}
+                    ariaLabel="nadpłata miesiąc {payment.month}"
+                 />
             {:else}
                 <input value="0" type="number" aria-label="nadpłata miesiąc {payment.month}">
             {/if}

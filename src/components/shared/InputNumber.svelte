@@ -7,8 +7,14 @@
     export let id = null;
     export let step = null;
     export let decimalPlaces = -1; // -1 = unset
+    export let ariaLabel = null;
 
     $: internalValue = value;
+
+    $: {
+        // react dinamically on max change
+        value = Math.min(value, max);
+    }
 
     let inputEl;
 
@@ -78,4 +84,5 @@
     step={step}
     use:selectOnFocus
     autocomplete="off"
+    aria-label={ariaLabel}
 >

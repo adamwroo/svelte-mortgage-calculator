@@ -12,7 +12,7 @@ const initialShowSchedule = true;
 export const showSchedule = localStore('show-schedule', initialShowSchedule);
 
 const initialOverpayments = new Array(numberOfPayments).fill(0);
-export const overpayments = localStore('overpayments-array', initialOverpayments);
+export const overpayments = localStore('overpayments-values', initialOverpayments);
 
 // todo: combine into 'overpayments-settings', initialOverpaymentsSettings);
 const initialDecreaseInstallmentAfterOverpayment = false;
