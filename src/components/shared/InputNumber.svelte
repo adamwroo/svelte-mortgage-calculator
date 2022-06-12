@@ -61,7 +61,10 @@
         // clean up formatting
         inputEl.value = internalValue.toString();
 
-        value = internalValue;
+        if (value != internalValue) {
+            value = internalValue;
+            dispatch('input');
+        }
     }
 
     const handleKeydown = (e) => {
