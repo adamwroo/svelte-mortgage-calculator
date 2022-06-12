@@ -1,24 +1,52 @@
 <script>
     import OverpaymentInfo from './schedule/OverpaymentInfo.svelte';
     import ScheduleWithOverpayments from './schedule/ScheduleWithOverpayments.svelte';
-    import { getScheduleDataWithOverpayments } from '../calculations';
+    import { getScheduleData } from '../calculations';
 
     export let mortgage;
     export let overpayments = [];
     export let decreaseInstallmentAfterOverpayment;
     export let highlightRowWithOverpay;
 
-    $: scheduleData = getScheduleDataWithOverpayments(mortgage, { overpayments, decreaseInstallmentAfterOverpayment });
+    $: scheduleData = getScheduleData(mortgage, { overpayments, decreaseInstallmentAfterOverpayment } );
+
+    const handleOverpaymentsUpdated = (overpayment) => {
+        const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
+        let newOverpayments = [...overpayments];
+
+        for (let i = 0; i < newOverpayments.length; i++) {
+            const month = i + 1;
+            if (month % overpaymentFrequency == 0) {
+                if (overwrite) {
+                    newOverpayments[i] = overpaymentAmount;
+                } else {
+                    newOverpayments[i] += overpaymentAmount;
+                }
+            }
+        }
+
+        overpayments = newOverpayments;
+    }
+
+    const handleOverpaymentUpdated = (overpayment) => {
+        overpayments[overpayment.month - 1] = overpayment.amount;
+    }
+
+    const handleClearOverpayments = () => {
+        overpayments = new Array(overpayments.length).fill(0);
+    }
 </script>
 
 <div class="schedule-container">
-    <OverpaymentInfo {mortgage} {scheduleData} {overpayments} />
+    <OverpaymentInfo {mortgage} {scheduleData} />
     <ScheduleWithOverpayments
         {scheduleData}
-        bind:overpayments={overpayments}
         mortgageAmount={mortgage.amount}
         bind:decreaseInstallmentAfterOverpayment={decreaseInstallmentAfterOverpayment}
-        {highlightRowWithOverpay}
+        bind:highlightRowWithOverpay={highlightRowWithOverpay}
+        on:overpaymentsUpdated={e => handleOverpaymentsUpdated(e.detail)}
+        on:overpaymentUpdated={e => handleOverpaymentUpdated(e.detail)}
+        on:clearOverpayments={handleClearOverpayments}
     />
 </div>
 

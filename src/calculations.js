@@ -71,24 +71,31 @@ const getMonthlyPayments = (amount, interestRate, numberOfPayments, monthlyInsta
     return payments;
 }
 
-const getMonthlyPaymentsWithOverpayments = (amount, interestRate, numberOfPayments, monthlyInstallment, overpaymentsInfo) => {
-    if (amount <= 0 || interestRate <= 0 || numberOfPayments <= 0 || monthlyInstallment <= 0) return [];
+export const getScheduleData = (mortgage, overpaymentsInfo) => {
+    if (!mortgage ||
+        mortgage.amount <= 0 ||
+        mortgage.interestRate <= 0 ||
+        mortgage.numberOfPayments <= 0 ||
+        mortgage.monthlyInstallment <= 0 ||
+        !overpaymentsInfo) return [];
+
+    const interestRate = mortgage.interestRate;
+    const numberOfPayments = mortgage.numberOfPayments;
+    let monthlyInstallment= mortgage.monthlyInstallment;
 
     let payments = [];
-    let capitalToRepay = amount;
+    let capitalToRepay = mortgage.amount;
 
-    let overpayments = overpaymentsInfo?.overpayments;
-    let decreaseInstallmentAfterOverpayment = overpaymentsInfo?.decreaseInstallmentAfterOverpayment;
+    let overpayments = overpaymentsInfo.overpayments;
 
     for (let i = 1; i <= numberOfPayments; i++) {
         // overpayment happens first
-        let overpayment = overpayments?.[i - 1] ?? 0;
-
+        let overpayment = Math.max(Math.min(overpayments[i - 1], capitalToRepay), 0);
         // decrease capital by overpayment (this happens BEFORE installment is paid)
         capitalToRepay = capitalToRepay - overpayment;
 
         // recalculate installment after overpayment (if selected)
-        if (overpayment > 0 && decreaseInstallmentAfterOverpayment) {
+        if (overpayment > 0 && overpaymentsInfo.decreaseInstallmentAfterOverpayment) {
             monthlyInstallment = calculateMonthlyInstallment(capitalToRepay, interestRate, numberOfPayments - i + 1);
         }
 
@@ -98,7 +105,7 @@ const getMonthlyPaymentsWithOverpayments = (amount, interestRate, numberOfPaymen
 
         // decrease capital for next month
         capitalToRepay = capitalToRepay - capitalInstallment;
-        let payment = { month: i, interestInstallment, capitalInstallment, capitalToRepay };
+        let payment = { month: i, interestInstallment, capitalInstallment, capitalToRepay, overpayment };
         payments.push(payment);
 
         if (capitalToRepay == 0) break;

@@ -1,20 +1,18 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
     import ScheduleDataRow from './ScheduleDataRow.svelte';
     import ScheduleDialog from './ScheduleDialog.svelte';
 
     export let scheduleData;
-    export let overpayments;
     export let mortgageAmount;
     export let decreaseInstallmentAfterOverpayment;
     export let highlightRowWithOverpay;
 
     let showingDialog = false;
-    let intersectings = new Array(scheduleData.length).fill(true);
-
-    $: getMaxIntersectingMonth = () => intersectings.lastIndexOf(true) + 1;
 
     const clearOverpayments = () => {
-        overpayments = new Array(overpayments.length).fill(0);
+        dispatch('clearOverpayments');
     }
 
     const openDialog = () => {
@@ -26,22 +24,17 @@
     }
 
     const updateScheduleOnSave = overpayment => {
-        const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
-        let newOverpayments = [...overpayments];
+        // overpayment: { overpaymentAmount, overpaymentFrequency, overwrite };
+        closeDialog();
+        dispatch('overpaymentsUpdated', overpayment);
+    }
 
-        for (let i = 0; i < newOverpayments.length; i++) {
-            const month = i + 1;
-            if (month % overpaymentFrequency == 0) {
-                if (overwrite) {
-                    newOverpayments[i] = overpaymentAmount;
-                } else {
-                    newOverpayments[i] += overpaymentAmount;
-                }
-            }
-        }
+    const getMaxOverpayment = (month) => {
+        return month == 1 ?  mortgageAmount : Math.ceil(scheduleData[month - 2].capitalToRepay / 100) * 100;
+    }
 
-        overpayments = newOverpayments;
-        closeDialog()
+    const getOverpayment = (month) => {
+        return Math.ceil(scheduleData[month - 1].overpayment / 100) * 100;
     }
 </script>
 
@@ -85,11 +78,10 @@
         {#each scheduleData as payment (payment.month)}
             <ScheduleDataRow
                 { highlightRowWithOverpay }
-                bind:overpayment={overpayments[payment.month - 1]}
+                overpayment={getOverpayment(payment.month)}
                 { payment }
-                max={payment.month == 1 ? mortgageAmount : scheduleData[payment.month - 2].capitalToRepay}
-                bind:intersecting={intersectings[payment.month - 1]}
-                fullView={payment.month == 1 || payment.month <= getMaxIntersectingMonth()}
+                maxOverpayment={getMaxOverpayment(payment.month)}
+                on:overpaymentUpdated
             />
         {/each}
     </table>

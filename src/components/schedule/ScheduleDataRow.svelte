@@ -1,56 +1,62 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
     import IntersectionObserver from "svelte-intersection-observer";
-    import InputNumberSafeMax from '../shared/InputNumberSafeMax.svelte';
+    import InputNumber from '../shared/InputNumber.svelte';
     import { toPLN, toYearsAndMonthsHint } from '../../utils';
 
     export let highlightRowWithOverpay;
     export let overpayment;
     export let payment;
-    export let max;
-    export let intersecting;
-    export let fullView;
+    export let maxOverpayment;
 
     let element;
+    const handleOverpaymentInput = (month) => {
+        dispatch('overpaymentUpdated', { month, amount: overpayment})
+    }
 </script>
 
-<IntersectionObserver {element} bind:intersecting>
+<IntersectionObserver {element} let:intersecting>
     <tr bind:this={element} class:with-overpayment={highlightRowWithOverpay && overpayment > 0}>
         <td class="hint" title={toYearsAndMonthsHint(payment.month)}>{payment.month}</td>
         <td>
-            {#if fullView}
-                <InputNumberSafeMax
-                bind:value={ overpayment }
-                min="0"
-                max={ max}
-                ariaLabel="nadpłata miesiąc {payment.month}"
-                />
+            {#if intersecting || payment.month == 1}
+                <InputNumber
+                    bind:value={overpayment}
+                    min={0}
+                    max={maxOverpayment}
+                    step={100}
+                    decimalPlaces={0}
+                    ariaLabel="nadpłata miesiąc {payment.month}"
+                    on:input={() => handleOverpaymentInput(payment.month)}
+                 />
             {:else}
                 <input value="0" type="number" aria-label="nadpłata miesiąc {payment.month}">
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting || payment.month == 1}
                 {toPLN(payment.capitalInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting || payment.month == 1}
                 {toPLN(payment.interestInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting || payment.month == 1}
                 {toPLN(payment.interestInstallment + payment.capitalInstallment)}
             {:else}
                 -
             {/if}
         </td>
         <td>
-            {#if fullView}
+            {#if intersecting || payment.month == 1}
                 {toPLN(payment.capitalToRepay)}
             {:else}
                 -

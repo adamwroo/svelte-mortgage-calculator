@@ -5,10 +5,9 @@
 
     export let mortgage;
     export let scheduleData;
-    export let overpayments;
 
-    $: overpaymentsSum = overpayments.slice(0, scheduleData.length).reduce((sum, overpayment) => sum + overpayment, 0);
-    $: interestInstallmentSum = scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0); // todo: sum shouldn't take place here (in calculations? object?)
+    $: overpaymentsSum = scheduleData.reduce((sum, {overpayment}) => sum + overpayment, 0);
+    $: interestInstallmentSum = scheduleData.reduce((sum, {interestInstallment}) => sum + interestInstallment, 0);
 </script>
 
 <InfoGrid>
