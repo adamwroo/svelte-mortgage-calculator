@@ -90,7 +90,7 @@ export const getScheduleData = (mortgage, overpaymentsInfo) => {
 
     for (let i = 1; i <= numberOfPayments; i++) {
         // overpayment happens first
-        let overpayment = Math.min(overpayments[i - 1], capitalToRepay);
+        let overpayment = Math.max(Math.min(overpayments[i - 1], capitalToRepay), 0);
         // decrease capital by overpayment (this happens BEFORE installment is paid)
         capitalToRepay = capitalToRepay - overpayment;
 

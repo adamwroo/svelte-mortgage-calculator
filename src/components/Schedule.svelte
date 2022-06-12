@@ -8,15 +8,32 @@
     export let decreaseInstallmentAfterOverpayment;
     export let highlightRowWithOverpay;
 
-    let scheduleData = [];
-    $: {
-        scheduleData = getScheduleData(mortgage, { overpayments, decreaseInstallmentAfterOverpayment });
-        // clear remaining overpayments
-        if (overpayments.length > scheduleData.length) {
-            for (let i = scheduleData.length; i < overpayments.length; i++) {
-                overpayments[i] = 0;
+    $: scheduleData = getScheduleData(mortgage, { overpayments, decreaseInstallmentAfterOverpayment } );
+
+    const handleOverpaymentsUpdated = (overpayment) => {
+        const { overpaymentAmount, overpaymentFrequency, overwrite } = overpayment;
+        let newOverpayments = [...overpayments];
+
+        for (let i = 0; i < newOverpayments.length; i++) {
+            const month = i + 1;
+            if (month % overpaymentFrequency == 0) {
+                if (overwrite) {
+                    newOverpayments[i] = overpaymentAmount;
+                } else {
+                    newOverpayments[i] += overpaymentAmount;
+                }
             }
         }
+
+        overpayments = newOverpayments;
+    }
+
+    const handleOverpaymentUpdated = (overpayment) => {
+        overpayments[overpayment.month - 1] = overpayment.amount;
+    }
+
+    const handleClearOverpayments = () => {
+        overpayments = new Array(overpayments.length).fill(0);
     }
 </script>
 
@@ -24,10 +41,12 @@
     <OverpaymentInfo {mortgage} {scheduleData} />
     <ScheduleWithOverpayments
         {scheduleData}
-        bind:overpayments={overpayments}
         mortgageAmount={mortgage.amount}
         bind:decreaseInstallmentAfterOverpayment={decreaseInstallmentAfterOverpayment}
         bind:highlightRowWithOverpay={highlightRowWithOverpay}
+        on:overpaymentsUpdated={e => handleOverpaymentsUpdated(e.detail)}
+        on:overpaymentUpdated={e => handleOverpaymentUpdated(e.detail)}
+        on:clearOverpayments={handleClearOverpayments}
     />
 </div>
 

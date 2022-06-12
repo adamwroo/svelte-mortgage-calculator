@@ -1,4 +1,6 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
     import { selectOnFocus } from '../../actions';
 
     export let value;
@@ -10,11 +12,6 @@
     export let ariaLabel = null;
 
     $: internalValue = value;
-
-    $: {
-        // react dinamically on max change
-        value = Math.min(value, max);
-    }
 
     let inputEl;
 
@@ -45,6 +42,8 @@
         if (Number.isInteger(step) && internalValue % step != 0) return; // allow but don't update value (allows user to continue typing and fixes, if necessary, in on:change)
 
         value = internalValue;
+
+        dispatch('input');
     }
 
     const handleChange = () => {
